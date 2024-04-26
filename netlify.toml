@@ -1,0 +1,22 @@
+[[redirects]]
+  from = "/Produtos/*"
+  to = "/server.js"
+  status = 200
+
+[[redirects]]
+  from = "/Vendas/*"
+  to = "/server.js"
+  status = 200
+
+[[redirects]]
+  from = "/Clientes/*"
+  to = "/server.js"
+  status = 200
+
+[[headers]]
+  # Define a política de CORS para permitir solicitações de qualquer origem
+  for = "/*"
+    [headers.values]
+      Access-Control-Allow-Origin = "*"
+      Access-Control-Allow-Methods = "GET, POST, PUT, DELETE"
+      Access-Control-Allow-Headers = "Content-Type"
