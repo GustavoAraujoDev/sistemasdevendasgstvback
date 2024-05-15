@@ -7,7 +7,7 @@ function requestVenda(req, res) {
 
     if (req.method === "GET") {
         const urlParts = req.url.split("/");
-        if (urlParts.length === 3 && urlParts[1] === "Vendas") {
+        if (urlParts.length === 3 && urlParts[1] === "ItensVendas") {
             // Listar itens de venda pelo ID da venda
             const vendaId = urlParts[2];
             controller.listarItensVenda(vendaId, (err, itens) => {
