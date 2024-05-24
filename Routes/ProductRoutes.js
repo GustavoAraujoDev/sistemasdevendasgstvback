@@ -56,9 +56,6 @@ function requestProdutos(req, res) {
             );
             console.log("Dados modificados com sucesso.");
         });
-    }else{
-        res.writeHead(405, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Método não permitido" }));
     }
 }
 

@@ -5,8 +5,6 @@ function requestClientes(req, res) {
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-    
-
     if (req.method === "GET") {
         controller.search((result) => {
             res.write(JSON.stringify(result));
@@ -60,9 +58,6 @@ function requestClientes(req, res) {
         console.log("Dados modificados com sucesso.");
         res.end(); // Envie a resposta após a modificação de dados
     });
-    }else{
-        res.writeHead(405, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Método não permitido" }));
     }
 }
 

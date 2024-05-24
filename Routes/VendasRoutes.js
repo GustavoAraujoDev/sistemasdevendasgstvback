@@ -77,9 +77,6 @@ function requestVenda(req, res) {
             controller.excluirVenda(parsedBody.id);
             console.log("Dados excluídos com sucesso.");
         });
-    }else{
-        res.writeHead(405, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Método não permitido" }));
     }
 }
 
