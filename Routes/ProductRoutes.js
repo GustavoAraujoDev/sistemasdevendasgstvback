@@ -6,7 +6,7 @@ function requestProdutos(req, res) {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     if (req.method === "GET") {
-        controller.Listar(res, req)
+        controller.Listar(req, res)
     } else if (req.method === "POST") {
         controller.Create(req, res)
     } else if (req.method === "DELETE") {

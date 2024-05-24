@@ -8,9 +8,8 @@ function requestClientes(req, res) {
     
 
     if (req.method === "GET") {
-        controller.Listar(res, req)
+        controller.Listar(req, res)
     }
-
     if (req.method === "POST") {
         controller.Create(req, res)
     } else if (req.method === "DELETE") {
