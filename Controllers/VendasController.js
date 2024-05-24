@@ -1,6 +1,6 @@
 const controller = require('../database/VendasData')
 
-function Listar(res, req) {
+function Listar(req, res) {
     const urlParts = req.url.split("/");
         if (urlParts.length === 4 && urlParts[2] === "ItensVendas") {
             // Listar itens de venda pelo ID da venda

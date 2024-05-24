@@ -1,6 +1,6 @@
 const controller = require('../database/ProductData')
 
-function Listar(res, req) {
+function Listar(req, res) {
     controller.search((result) => {
         res.write(JSON.stringify(result));
         res.end();
