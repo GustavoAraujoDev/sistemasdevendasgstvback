@@ -6,13 +6,56 @@ function requestProdutos(req, res) {
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
     if (req.method === "GET") {
-        controller.Listar(req, res)
+        controller.search((result) => {
+            res.write(JSON.stringify(result));
+            res.end();
+        });
     } else if (req.method === "POST") {
-        controller.Create(req, res)
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.insertData.run(
+                parsedBody.Nome,
+                parsedBody.Descricao,
+                parsedBody.Preco,
+                parsedBody.PrecoVenda,
+                parsedBody.Quantidade
+            );
+            console.log("Dados criados com sucesso.");
+        });
     } else if (req.method === "DELETE") {
-        controller.Delete(req, res)
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.deleteData.run(parsedBody.ProductID);
+            console.log("Dados excluídos com sucesso.");
+        });
     } else if (req.method === "PUT") {
-        controller.Update(req, res)
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.modifyData.run(
+                parsedBody.Nome,
+                parsedBody.Descricao,
+                parsedBody.Preco,
+                parsedBody.PrecoVenda,
+                parsedBody.Quantidade,
+                parsedBody.ProductID
+            );
+            console.log("Dados modificados com sucesso.");
+        });
     }else{
         res.writeHead(405, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Método não permitido" }));

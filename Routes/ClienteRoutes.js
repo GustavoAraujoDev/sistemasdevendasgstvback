@@ -8,14 +8,58 @@ function requestClientes(req, res) {
     
 
     if (req.method === "GET") {
-        controller.Listar(req, res)
+        controller.search((result) => {
+            res.write(JSON.stringify(result));
+            res.end();
+        });
     }
     if (req.method === "POST") {
-        controller.Create(req, res)
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.insertData.run(
+                parsedBody.nome,
+                parsedBody.email,
+                parsedBody.cpf,
+                parsedBody.telefone
+            );
+            console.log("Dados criados com sucesso.");
+            res.end(); // Envie a resposta após a inserção de dados
+        });
     } else if (req.method === "DELETE") {
-        controller.Delete(req, res)
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.deleteData.run(parsedBody.id);
+            console.log("Dados excluídos com sucesso.");
+            res.end(); // Envie a resposta após a exclusão de dados
+        });
     } else if (req.method === "PUT") {
-        controller.Update(req, res)
+        let body = "";
+    req.on("data", (chunk) => {
+        body += chunk;
+    });
+    req.on("end", () => {
+        const parsedBody = JSON.parse(body);
+        console.log(parsedBody);
+        controller.modifyData.run(
+            parsedBody.Nome,
+            parsedBody.email,
+            parsedBody.cpf,
+            parsedBody.telefone,
+            parsedBody.id
+        );
+        console.log("Dados modificados com sucesso.");
+        res.end(); // Envie a resposta após a modificação de dados
+    });
     }else{
         res.writeHead(405, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ message: "Método não permitido" }));
