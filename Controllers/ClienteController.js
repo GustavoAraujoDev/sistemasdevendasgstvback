@@ -1,97 +1,63 @@
-const sqlite3 = require("sqlite3").verbose();
+const controller = require('../database/ClienteData')
 
-const db = new sqlite3.Database("SistemaVendaGstv.db", (err) => {
-    if (err) {
-        console.error(err);
-    } else {
-        createTable();
-        console.log("Conexão estabelecida com sucesso.");
-    }
-});
-
-function createTable() {
-    db.run(
-        `CREATE TABLE IF NOT EXISTS Client(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nome TEXT,
-            email TEXT,
-            cpf TEXT,
-            telefone TEXT
-        )`,
-        (err) => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("Tabela criada com sucesso.");
-            }
-        }
-    );
+function Listar(res, req) {
+    controller.search((result) => {
+        res.write(JSON.stringify(result));
+        res.end();
+    });
+}
+function Create(req, res) {
+    let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.insertData.run(
+                parsedBody.nome,
+                parsedBody.email,
+                parsedBody.cpf,
+                parsedBody.telefone
+            );
+            console.log("Dados criados com sucesso.");
+            res.end(); // Envie a resposta após a inserção de dados
+        });
 }
 
-const getClientCount = (callback) => {
-    db.get("SELECT COUNT(*) as count FROM Client", (err, row) => {
-        if (err) {
-            console.error(err);
-            callback(0); // Retorna 0 em caso de erro
-        } else {
-            callback(row.count || 0);
-        }
+function Update(req, res) {
+    let body = "";
+    req.on("data", (chunk) => {
+        body += chunk;
     });
-};
-
-const search = (callback) => {
-    db.all("SELECT * FROM Client", (err, rows) => {
-        if (err) {
-            console.error(err);
-        } else {
-            callback(rows);
-        }
+    req.on("end", () => {
+        const parsedBody = JSON.parse(body);
+        console.log(parsedBody);
+        controller.modifyData.run(
+            parsedBody.Nome,
+            parsedBody.email,
+            parsedBody.cpf,
+            parsedBody.telefone,
+            parsedBody.id
+        );
+        console.log("Dados modificados com sucesso.");
+        res.end(); // Envie a resposta após a modificação de dados
     });
-};
-
-const insertData = db.prepare(
-    `INSERT INTO Client (nome, email, cpf, telefone)
-    VALUES (?, ?, ?, ?)`,
-    (err) => {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log("Dados inseridos com sucesso.");
-        }
-    }
-);
-
-const deleteData = db.prepare(
-    `DELETE FROM Client WHERE id = ?`,
-    (err) => {
-        if (err) {
-            console.error(err);
-        } else {
+}
+function Delete(req, res) {
+    let body = "";
+        req.on("data", (chunk) => {
+            body += chunk;
+        });
+        req.on("end", () => {
+            const parsedBody = JSON.parse(body);
+            console.log(parsedBody);
+            controller.deleteData.run(parsedBody.id);
             console.log("Dados excluídos com sucesso.");
-        }
-    }
-);
-
-const modifyData = db.prepare(
-    `UPDATE Client
-      SET nome = ?,
-          email = ?,
-          cpf = ?,
-          telefone = ?
-     WHERE id = ?`,
-    (err) => {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log("Dados modificados com sucesso.");
-        }
-    }
-);
+            res.end(); // Envie a resposta após a exclusão de dados
+        });
+}
 
 module.exports = {
-    search,
-    getClientCount,
-    insertData,
-    deleteData,
-    modifyData
-};
+    Listar, Create, Update, Delete
+}

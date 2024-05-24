@@ -1,4 +1,4 @@
-const controller = require("../Controllers/ProductController")
+const controller = require("../database/ProductData")
 
 function requestProdutos(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
