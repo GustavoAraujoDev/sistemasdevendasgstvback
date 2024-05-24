@@ -13,6 +13,9 @@ function requestVenda(req, res) {
         controller.Update(req, res)
     } else if (req.method === "DELETE") {
         controller.Delete(req, res)
+    }else{
+        res.writeHead(405, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Método não permitido" }));
     }
 }
 

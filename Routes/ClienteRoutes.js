@@ -17,6 +17,9 @@ function requestClientes(req, res) {
         controller.Delete(req, res)
     } else if (req.method === "PUT") {
         controller.Update(req, res)
+    }else{
+        res.writeHead(405, { "Content-Type": "application/json" });
+        res.end(JSON.stringify({ message: "Método não permitido" }));
     }
 }
 
