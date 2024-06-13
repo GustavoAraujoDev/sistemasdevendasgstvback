@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
-
-const db = new sqlite3.Database("SistemaVendaGstv.db", (err) => {
+const dbPath = './SistemaVendaGstv.db';
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error(err);
     } else {
@@ -161,6 +161,16 @@ const excluirVenda = (id, callback) => {
         }
     });
 };
+
+process.on('exit', () => {
+    db.close((err) => {
+        if (err) {
+            console.error('Erro ao fechar o banco de dados:', err.message);
+        } else {
+            console.log('Banco de dados fechado com sucesso.');
+        }
+    });
+});
 
 module.exports = {
     getTotalVendas,
