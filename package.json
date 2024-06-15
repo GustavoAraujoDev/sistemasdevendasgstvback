@@ -1,7 +1,6 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
   "main": "Server.js",
   "scripts": {
     "start": "node Server.js"
@@ -10,10 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.19.2",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "typescript": "^5.4.5"
-  }
+  },
+  "description": ""
 }
