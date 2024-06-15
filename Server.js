@@ -1,31 +1,27 @@
-const http = require("http");
-const routesproduct = require("./Routes/ProductRoutes")
-const routesvendas = require("./Routes/VendasRoutes")
-const routescliente = require("./Routes/ClienteRoutes")
+const express = require("express");
+const cors = require("cors");
+const routesProduct = require("./Routes/ProductRoutes");
+const routesVendas = require("./Routes/VendasRoutes");
+const routesCliente = require("./Routes/ClienteRoutes");
+
 const PORT = process.env.PORT || 6060;
 
-const server = http.createServer((req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+const app = express();
 
-    if (req.method === "OPTIONS") {
-        res.writeHead(200);
-        res.end();
-        return;
-    }
+// Middleware for CORS
+app.use(cors());
 
-    if (req.url.startsWith("/Produtos")) {
-        routesproduct.requestProdutos(req, res);
-    } else if  (req.url.startsWith("/Vendas")) {
-        routesvendas.requestVenda(req, res);
-    } else if  (req.url.startsWith("/Clientes")) {
-        routescliente.requestClientes(req, res);
-    } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ message: "Rota não encontrada" }));
-    }
+// Middleware to parse JSON bodies
+app.use(express.json());
+
+app.use("/Produtos", routesProduct);
+app.use("/Vendas", routesVendas);
+app.use("/Clientes", routesCliente);
+
+app.use((req, res) => {
+    res.status(404).json({ message: "Rota não encontrada" });
 });
-server.listen(PORT, () => {
+
+app.listen(PORT, () => {
     console.log(`Servidor escutando no porto ${PORT}`);
 });

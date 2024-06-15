@@ -1,66 +1,39 @@
-const controller = require("../database/ClienteData")
+const express = require("express");
+const router = express.Router();
+const controller = require("../database/ClienteData");
 
-function requestClientes(req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-    if (req.method === "GET") {
-        controller.search((result) => {
-            res.write(JSON.stringify(result));
-            res.end();
-        });
-    }
-    if (req.method === "POST") {
-        let body = "";
-        req.on("data", (chunk) => {
-            body += chunk;
-        });
-        req.on("end", () => {
-            const parsedBody = JSON.parse(body);
-            console.log(parsedBody);
-            controller.insertData.run(
-                parsedBody.nome,
-                parsedBody.email,
-                parsedBody.cpf,
-                parsedBody.telefone
-            );
-            console.log("Dados criados com sucesso.");
-            res.end(); // Envie a resposta após a inserção de dados
-        });
-    } else if (req.method === "DELETE") {
-        let body = "";
-        req.on("data", (chunk) => {
-            body += chunk;
-        });
-        req.on("end", () => {
-            const parsedBody = JSON.parse(body);
-            console.log(parsedBody);
-            controller.deleteData.run(parsedBody.id);
-            console.log("Dados excluídos com sucesso.");
-            res.end(); // Envie a resposta após a exclusão de dados
-        });
-    } else if (req.method === "PUT") {
-        let body = "";
-    req.on("data", (chunk) => {
-        body += chunk;
+// Rota GET para buscar todos os clientes
+router.get("/", (req, res) => {
+    controller.search((result) => {
+        res.json(result);
     });
-    req.on("end", () => {
-        const parsedBody = JSON.parse(body);
-        console.log(parsedBody);
-        controller.modifyData.run(
-            parsedBody.Nome,
-            parsedBody.email,
-            parsedBody.cpf,
-            parsedBody.telefone,
-            parsedBody.id
-        );
+});
+
+// Rota POST para criar um novo cliente
+router.post("/", (req, res) => {
+    const { nome, email, cpf, telefone } = req.body;
+    controller.insertData.run(nome, email, cpf, telefone, () => {
+        console.log("Dados criados com sucesso.");
+        res.status(201).end();
+    });
+});
+
+// Rota DELETE para deletar um cliente
+router.delete("/", (req, res) => {
+    const { id } = req.body;
+    controller.deleteData.run(id, () => {
+        console.log("Dados excluídos com sucesso.");
+        res.status(204).end();
+    });
+});
+
+// Rota PUT para atualizar um cliente
+router.put("/", (req, res) => {
+    const { Nome, email, cpf, telefone, id } = req.body;
+    controller.modifyData.run(Nome, email, cpf, telefone, id, () => {
         console.log("Dados modificados com sucesso.");
-        res.end(); // Envie a resposta após a modificação de dados
+        res.status(200).end();
     });
-    }
-}
+});
 
-module.exports = {
-    requestClientes
-}
+module.exports = router;

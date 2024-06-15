@@ -1,85 +1,65 @@
+const express = require("express");
+const router = express.Router();
 const controller = require("../database/VendasData");
 
-function requestVenda(req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
-    if (req.method === "GET") {
-        const urlParts = req.url.split("/");
-        if (urlParts.length === 4 && urlParts[2] === "ItensVendas") {
-            // Listar itens de venda pelo ID da venda
-            const vendaId = urlParts[3];
-            controller.listarItensVenda(vendaId, (err, itens) => {
-                if (err) {
-                    res.writeHead(500, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify({ error: "Erro ao listar itens da venda." }));
-                } else {
-                    res.writeHead(200, { "Content-Type": "application/json" });
-                    res.end(JSON.stringify(itens));
-                }
-            });
-        }
-        else{
-            controller.listarVendas((err, vendas) => {
+// Rota GET para listar todas as vendas ou itens de uma venda específica
+router.get("/:type(ItensVendas)?/:id?", (req, res) => {
+    if (req.params.type === "ItensVendas" && req.params.id) {
+        // Listar itens de venda pelo ID da venda
+        const vendaId = req.params.id;
+        controller.listarItensVenda(vendaId, (err, itens) => {
             if (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Erro ao listar vendas." }));
+                res.status(500).json({ error: "Erro ao listar itens da venda." });
             } else {
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify(vendas));
-            }
-        });}  // Listar todas as vendas
-    } else if (req.method === "POST") {
-      // Inserir nova venda
-    let body = "";
-    req.on("data", (chunk) => {
-        body += chunk;
-    });
-    req.on("end", () => {
-        const novaVenda = JSON.parse(body);
-        controller.inserirVenda(novaVenda.items, novaVenda.totalPrice, novaVenda.pagamento, novaVenda.situacao, novaVenda.id, (err, vendaId) => {
-            if (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Erro ao inserir venda." }));
-            } else {
-                res.writeHead(201, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ message: "Venda inserida com sucesso.", vendaId }));
+                res.status(200).json(itens);
             }
         });
-    });
-// Adicione outras rotas POST, se necessário
-    } else if (req.method === "PUT") {
-        let body = "";
-    req.on("data", (chunk) => {
-        body += chunk;
-    });
-    req.on("end", () => {
-        const novaVenda = JSON.parse(body);
-        controller.modificarVenda(novaVenda.situacao, novaVenda.vendaId, (err) => {
+    } else {
+        // Listar todas as vendas
+        controller.listarVendas((err, vendas) => {
             if (err) {
-                res.writeHead(500, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ error: "Erro ao modificar venda." }));
+                res.status(500).json({ error: "Erro ao listar vendas." });
             } else {
-                res.writeHead(200, { "Content-Type": "application/json" });
-                res.end(JSON.stringify({ message: "Venda modificada com sucesso." }));
+                res.status(200).json(vendas);
             }
-        });
-    });
-    } else if (req.method === "DELETE") {
-        let body = "";
-        req.on("data", (chunk) => {
-            body += chunk;
-        });
-        req.on("end", () => {
-            const parsedBody = JSON.parse(body);
-            console.log(parsedBody);
-            controller.excluirVenda(parsedBody.id);
-            console.log("Dados excluídos com sucesso.");
         });
     }
-}
+});
 
-module.exports = {
-    requestVenda
-}
+// Rota POST para inserir nova venda
+router.post("/", (req, res) => {
+    const { items, totalPrice, pagamento, situacao, id } = req.body;
+    controller.inserirVenda(items, totalPrice, pagamento, situacao, id, (err, vendaId) => {
+        if (err) {
+            res.status(500).json({ error: "Erro ao inserir venda." });
+        } else {
+            res.status(201).json({ message: "Venda inserida com sucesso.", vendaId });
+        }
+    });
+});
+
+// Rota PUT para modificar uma venda
+router.put("/", (req, res) => {
+    const { situacao, vendaId } = req.body;
+    controller.modificarVenda(situacao, vendaId, (err) => {
+        if (err) {
+            res.status(500).json({ error: "Erro ao modificar venda." });
+        } else {
+            res.status(200).json({ message: "Venda modificada com sucesso." });
+        }
+    });
+});
+
+// Rota DELETE para excluir uma venda
+router.delete("/", (req, res) => {
+    const { id } = req.body;
+    controller.excluirVenda(id, (err) => {
+        if (err) {
+            res.status(500).json({ error: "Erro ao excluir venda." });
+        } else {
+            res.status(204).end();
+        }
+    });
+});
+
+module.exports = router;
