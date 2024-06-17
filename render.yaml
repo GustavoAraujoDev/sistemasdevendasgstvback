@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: my-service
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: starter
+    region: oregon
+    build:
+      version: 16.x  
