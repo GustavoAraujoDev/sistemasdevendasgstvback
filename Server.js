@@ -14,9 +14,9 @@ app.use(cors());
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-app.use("/Produtos", routesProduct);
-app.use("/Vendas", routesVendas);
-app.use("/Clientes", routesCliente);
+app.use("/api/Produtos", routesProduct);
+app.use("/api/Vendas", routesVendas);
+app.use("/api/Clientes", routesCliente);
 
 app.use((req, res) => {
     res.status(404).json({ message: "Rota não encontrada" });
