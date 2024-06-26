@@ -17,6 +17,13 @@ app.use(express.json());
 app.use("/api/Produtos", routesProduct);
 app.use("/api/Vendas", routesVendas);
 app.use("/api/Clientes", routesCliente);
+app.use(errorHandler);
+
+app.listen(port, async () => {
+    const db = require('./config/dbconfig');
+    await db.createTable(); // Cria a tabela ao iniciar o servidor
+    console.log(`Servidor rodando na porta ${port}`);
+});
 
 app.use((req, res) => {
     res.status(404).json({ message: "Rota não encontrada" });
