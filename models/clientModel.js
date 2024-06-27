@@ -1,29 +1,6 @@
 const db = require('../config/dbconfig');
 const logger = require('../config/logger');
 
-const createTable = () => {
-    return new Promise((resolve, reject) => {
-        db.run(
-            `CREATE TABLE IF NOT EXISTS Client(
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome TEXT,
-                email TEXT,
-                cpf TEXT,
-                telefone TEXT
-            )`,
-            (err) => {
-                if (err) {
-                    logger.error(`Erro ao criar tabela: ${err}`);
-                    reject(err);
-                } else {
-                    logger.info('Tabela criada com sucesso.');
-                    resolve();
-                }
-            }
-        );
-    });
-};
-
 const getClientCount = () => {
     return new Promise((resolve, reject) => {
         db.get("SELECT COUNT(*) as count FROM Client", (err, row) => {
