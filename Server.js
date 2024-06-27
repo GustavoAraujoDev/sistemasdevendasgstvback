@@ -3,7 +3,7 @@ const cors = require("cors");
 const routesProduct = require("./Routes/ProductRoutes");
 const routesVendas = require("./Routes/VendasRoutes");
 const routesCliente = require("./Routes/ClienteRoutes");
-
+const errorHandler = require("./middleware/errorHandler");
 const PORT = process.env.PORT || 6060;
 
 const app = express();

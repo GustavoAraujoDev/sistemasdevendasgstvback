@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
-const validateRequest = require('../middlewares/validateRequest');
-const { productSchema } = require('../middlewares/productValidation');
+const validateRequest = require('../middleware/validateRequest');
+const { productSchema } = require('../middleware/productValidation');
 
 router.get('/', productController.getAllProducts);
 router.post('/', validateRequest(productSchema), productController.addProduct);

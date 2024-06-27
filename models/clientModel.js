@@ -88,7 +88,6 @@ const modifyData = (id, nome, email, cpf, telefone) => {
 };
 
 module.exports = {
-    createTable,
     getClientCount,
     search,
     insertData,

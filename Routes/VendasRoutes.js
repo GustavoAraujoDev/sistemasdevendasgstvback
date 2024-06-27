@@ -2,8 +2,8 @@ const express = require('express');
 const salesController = require('../controllers/salesController');
 
 const router = express.Router();
-const validateRequest = require('../middlewares/validateRequest');
-const { salesSchema } = require('../middlewares/salesValidation');
+const validateRequest = require('../middleware/validateRequest');
+const { salesSchema } = require('../middleware/salesValidation');
 
 router.get('/vendas/total', salesController.getTotalVendas);
 router.post('/vendas', validateRequest(salesSchema), salesController.inserirVenda);
