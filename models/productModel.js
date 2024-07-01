@@ -1,7 +1,7 @@
 const db = require('../config/dbconfig');
 
 const getProductCount = (callback) => {
-    db.get("SELECT COUNT(*) as count FROM Product", (err, row) => {
+    db.db.get("SELECT COUNT(*) as count FROM Product", (err, row) => {
         if (err) {
             console.error(err);
             callback(0);
@@ -12,7 +12,7 @@ const getProductCount = (callback) => {
 };
 
 const getAllProducts = (callback) => {
-    db.all("SELECT * FROM Product", (err, rows) => {
+    db.db.all("SELECT * FROM Product", (err, rows) => {
         if (err) {
             console.error(err);
         } else {
@@ -23,7 +23,7 @@ const getAllProducts = (callback) => {
 
 const insertProduct = (product, callback) => {
     const { Nome, Descricao, Preco, PrecoVenda, Quantidade } = product;
-    const stmt = db.prepare(
+    const stmt = db.db.prepare(
         `INSERT INTO Product (Nome, Descricao, Preco, PrecoVenda, Quantidade)
         VALUES (?, ?, ?, ?, ?)`,
         (err) => {
@@ -39,7 +39,7 @@ const insertProduct = (product, callback) => {
 };
 
 const deleteProduct = (id, callback) => {
-    const stmt = db.prepare(
+    const stmt = db.db.prepare(
         `DELETE FROM Product WHERE ProductID = ?`,
         (err) => {
             if (err) {
@@ -55,7 +55,7 @@ const deleteProduct = (id, callback) => {
 
 const updateProduct = (product, callback) => {
     const { ProductID, Nome, Descricao, Preco, PrecoVenda, Quantidade } = product;
-    const stmt = db.prepare(
+    const stmt = db.db.prepare(
         `UPDATE Product
           SET Nome = ?,
               Descricao = ?,

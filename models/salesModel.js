@@ -1,7 +1,7 @@
 const db = require('../config/dbconfig');
 
 const getTotalVendas = (callback) => {
-    db.get("SELECT SUM(total_price) AS total FROM Vendas", (err, row) => {
+    db.db.get("SELECT SUM(total_price) AS total FROM Vendas", (err, row) => {
         if (err) {
             callback(err, null);
         } else {
@@ -13,7 +13,7 @@ const getTotalVendas = (callback) => {
 
 const inserirVenda = (items, totalPrice, pagamento, situacao, clienteId, callback) => {
     const dataVenda = new Date().toISOString();
-    db.run('INSERT INTO Vendas (data_venda, total_price, pagamento, situacao, cliente_id) VALUES (?, ?, ?, ?, ?)', 
+    db.db.run('INSERT INTO Vendas (data_venda, total_price, pagamento, situacao, cliente_id) VALUES (?, ?, ?, ?, ?)', 
         [dataVenda, totalPrice, pagamento, situacao, clienteId], function(err) {
         if (err) {
             callback(err, null);
@@ -38,7 +38,7 @@ const inserirVenda = (items, totalPrice, pagamento, situacao, clienteId, callbac
 };
 
 const listarVendas = (callback) => {
-    db.all("SELECT * FROM Vendas", (err, rows) => {
+    db.db.all("SELECT * FROM Vendas", (err, rows) => {
         if (err) {
             callback(err, null);
         } else {
@@ -48,7 +48,7 @@ const listarVendas = (callback) => {
 };
 
 const listarItensVenda = (vendaId, callback) => {
-    db.all("SELECT * FROM ItensVenda WHERE venda_id = ?", [vendaId], (err, rows) => {
+    db.db.all("SELECT * FROM ItensVenda WHERE venda_id = ?", [vendaId], (err, rows) => {
         if (err) {
             callback(err, null);
         } else {
@@ -58,7 +58,7 @@ const listarItensVenda = (vendaId, callback) => {
 };
 
 const modificarVenda = (situacao, vendaId, callback) => {
-    db.run("UPDATE Vendas SET situacao = ? WHERE id = ?", [situacao, vendaId], function(err) {
+    db.db.run("UPDATE Vendas SET situacao = ? WHERE id = ?", [situacao, vendaId], function(err) {
         if (err) {
             callback(err);
         } else {
@@ -68,7 +68,7 @@ const modificarVenda = (situacao, vendaId, callback) => {
 };
 
 const excluirVenda = (vendaId, callback) => {
-    db.run("DELETE FROM Vendas WHERE id = ?", [vendaId], function(err) {
+    db.db.run("DELETE FROM Vendas WHERE id = ?", [vendaId], function(err) {
         if (err) {
             callback(err);
         } else {

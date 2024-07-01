@@ -2,3 +2,17 @@
 2024-06-27T22:44:54.124Z [INFO]: Tabela Product criada com sucesso.
 2024-06-27T22:44:54.229Z [INFO]: Tabela Vendas criada com sucesso.
 2024-06-27T22:44:54.372Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-01T17:13:37.664Z [INFO]: Tabela Client criada com sucesso.
+2024-07-01T17:13:38.677Z [INFO]: Tabela Product criada com sucesso.
+2024-07-01T17:13:38.706Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-01T17:13:38.733Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-01T17:19:38.349Z [ERROR]: Erro ao buscar clientes: TypeError: db.all is not a function
+2024-07-01T17:22:50.871Z [INFO]: Tabela Client criada com sucesso.
+2024-07-01T17:22:50.888Z [INFO]: Tabela Product criada com sucesso.
+2024-07-01T17:22:50.890Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-01T17:22:50.892Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-01T17:30:38.552Z [INFO]: Tabela Client criada com sucesso.
+2024-07-01T17:30:38.570Z [INFO]: Tabela Product criada com sucesso.
+2024-07-01T17:30:38.572Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-01T17:30:38.576Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-01T17:39:44.596Z [ERROR]: Erro ao buscar clientes: TypeError: db.all is not a function

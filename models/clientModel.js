@@ -3,7 +3,7 @@ const logger = require('../config/logger');
 
 const getClientCount = () => {
     return new Promise((resolve, reject) => {
-        db.get("SELECT COUNT(*) as count FROM Client", (err, row) => {
+        db.db.get("SELECT COUNT(*) as count FROM Client", (err, row) => {
             if (err) {
                 logger.error(`Erro ao obter contagem de clientes: ${err}`);
                 reject(err);
@@ -16,7 +16,7 @@ const getClientCount = () => {
 
 const search = () => {
     return new Promise((resolve, reject) => {
-        db.all("SELECT * FROM Client", (err, rows) => {
+        db.db.all("SELECT * FROM Client", (err, rows) => {
             if (err) {
                 logger.error(`Erro ao buscar clientes: ${err}`);
                 reject(err);
@@ -29,7 +29,7 @@ const search = () => {
 
 const insertData = (nome, email, cpf, telefone) => {
     return new Promise((resolve, reject) => {
-        const stmt = db.prepare(
+        const stmt = db.db.prepare(
             `INSERT INTO Client (nome, email, cpf, telefone) VALUES (?, ?, ?, ?)`
         );
 
@@ -49,7 +49,7 @@ const insertData = (nome, email, cpf, telefone) => {
 
 const deleteData = (id) => {
     return new Promise((resolve, reject) => {
-        const stmt = db.prepare(
+        const stmt = db.db.prepare(
             `DELETE FROM Client WHERE id = ?`
         );
 
@@ -69,7 +69,7 @@ const deleteData = (id) => {
 
 const modifyData = (id, nome, email, cpf, telefone) => {
     return new Promise((resolve, reject) => {
-        const stmt = db.prepare(
+        const stmt = db.db.prepare(
             `UPDATE Client SET nome = ?, email = ?, cpf = ?, telefone = ? WHERE id = ?`
         );
 
