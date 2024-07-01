@@ -16,3 +16,7 @@
 2024-07-01T17:30:38.572Z [INFO]: Tabela Vendas criada com sucesso.
 2024-07-01T17:30:38.576Z [INFO]: Tabela ItensVenda criada com sucesso.
 2024-07-01T17:39:44.596Z [ERROR]: Erro ao buscar clientes: TypeError: db.all is not a function
+2024-07-01T17:40:34.803Z [INFO]: Tabela Client criada com sucesso.
+2024-07-01T17:40:34.812Z [INFO]: Tabela Product criada com sucesso.
+2024-07-01T17:40:34.813Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-01T17:40:34.821Z [INFO]: Tabela ItensVenda criada com sucesso.

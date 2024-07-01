@@ -1,11 +1,11 @@
 const productService = require('../services/productService');
-
+const logger = require('../config/logger');
 const getAllProducts = async (req, res) => {
     try {
         const products = await productService.getAllProducts();
-        res.status(200).json(products);
+        res.json(products);
     } catch (err) {
-        console.error(err);
+        logger.error(err);
         res.status(500).json({ error: 'Erro ao buscar produtos' });
     }
 };
