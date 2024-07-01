@@ -6,40 +6,10 @@
         "use": "@vercel/node"
       }
     ],
-    "env": {
-      "NODE_ENV": "production",
-      "PORT": "6060"
-    },
-    "headers": [
+    "routes": [
       {
-        "source": "/(.*)",
-        "headers": [
-          {
-            "key": "X-Content-Type-Options",
-            "value": "nosniff"
-          },
-          {
-            "key": "X-Frame-Options",
-            "value": "DENY"
-          },
-          {
-            "key": "X-XSS-Protection",
-            "value": "1; mode=block"
-          }
-        ]
-      }
-    ],
-    "redirects": [
-      {
-        "source": "/old-route",
-        "destination": "/new-route",
-        "statusCode": 301
-      }
-    ],
-    "rewrites": [
-      {
-        "source": "/api/(.*)",
-        "destination": "/api/server.js"
+        "src": "/(.*)",
+        "dest": "/server.js"
       }
     ]
   }
