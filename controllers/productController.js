@@ -6,7 +6,7 @@ const getAllProducts = async (req, res) => {
         res.json(products);
     } catch (err) {
         logger.error(err);
-        res.status(500).json({ error: 'Erro ao buscar produtos' });
+        res.status(500).json({ error: err.message });
     }
 };
 
