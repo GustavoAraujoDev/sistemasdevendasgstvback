@@ -17,7 +17,9 @@
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
     "glob": "^10.4.2",
-    "sqlite3": "^7.5.0",
+    "lru-cache": "^10.3.0",
+    "rimraf": "^5.0.7",
+    "sqlite3": "^5.1.7",
     "winston": "^3.13.0"
   },
   "devDependencies": {
