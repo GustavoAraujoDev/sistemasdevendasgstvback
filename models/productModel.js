@@ -25,21 +25,23 @@ const getAllProducts = () => {
 };
 
 
-const insertProduct = (product, callback) => {
-    const { Nome, Descricao, Preco, PrecoVenda, Quantidade } = product;
+const insertProduct = (Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
+    return new Promise((resolve, reject) => {
     const stmt = db.db.prepare(
         `INSERT INTO Product (Nome, Descricao, Preco, PrecoVenda, Quantidade)
-        VALUES (?, ?, ?, ?, ?)`,
-        (err) => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log("Dados inseridos com sucesso.");
-            }
-        }
+        VALUES (?, ?, ?, ?, ?)`
     );
-    stmt.run(Nome, Descricao, Preco, PrecoVenda, Quantidade, callback);
+    stmt.run(Nome, Descricao, Preco, PrecoVenda, Quantidade, (err) => {
+        if (err) {
+            logger.error(`Erro ao inserir dados: ${err}`);
+            reject(err);
+        } else {
+            logger.info('Dados inseridos com sucesso.');
+            resolve();
+        }
     stmt.finalize();
+});
+});
 };
 
 const deleteProduct = (id, callback) => {

@@ -12,9 +12,9 @@ const getAllProducts = async () => {
     }
 };
 
-const addProduct = async (product) => {
+const addProduct = async (Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
     try {
-        const products = await productModel.insertProduct(product);
+        const products = await productModel.insertProduct(Nome, Descricao, Preco, PrecoVenda, Quantidade);
         logger.info('Successfully added product', { product });
         return products;
     } catch (error) {

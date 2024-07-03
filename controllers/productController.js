@@ -11,9 +11,9 @@ const getAllProducts = async (req, res) => {
 };
 
 const addProduct = async (req, res) => {
+    const { Nome, Descricao, Preco, PrecoVenda, Quantidade } = req.body;
     try {
-        console.log(req.body)
-        await productService.addProduct(req.body);
+        await productService.addProduct(Nome, Descricao, Preco, PrecoVenda, Quantidade);
         res.status(201).json({ message: 'Product criado com sucesso' });
     } catch (err) {
         console.error(err);
