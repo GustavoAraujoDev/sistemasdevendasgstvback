@@ -12,8 +12,9 @@ const getAllProducts = async (req, res) => {
 
 const addProduct = async (req, res) => {
     try {
-        const newProduct = await productService.addProduct(req.body);
-        res.status(201).json(newProduct);
+        console.log(req.body)
+        await productService.addProduct(req.body);
+        res.status(201).json({ message: 'Product criado com sucesso' });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Erro ao adicionar produto' });

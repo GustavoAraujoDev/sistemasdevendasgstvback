@@ -14,9 +14,9 @@ const getAllProducts = async () => {
 
 const addProduct = async (product) => {
     try {
-        await productModel.insertProduct(product);
+        const products = await productModel.insertProduct(product);
         logger.info('Successfully added product', { product });
-        return product;
+        return products;
     } catch (error) {
         logger.error(`Error inserting product: ${error.message || error}`);
         throw new Error(`Error inserting product: ${error.message || error}`);
