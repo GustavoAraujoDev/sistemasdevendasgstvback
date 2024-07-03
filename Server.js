@@ -8,8 +8,12 @@ const PORT = process.env.PORT || 6060;
 
 const app = express();
 
-// Middleware for CORS
-app.use(cors());
+const corsOptions = {
+    origin: '*',
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
