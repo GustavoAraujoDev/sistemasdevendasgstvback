@@ -3,75 +3,44 @@ const logger = require('../config/logger');
 
 const getAllProducts = async () => {
     try {
-        const rows = await new Promise((resolve, reject) => {
-            productModel.getAllProducts((err, rows) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(rows);
-            });
-        });
+        const products = await productModel.getAllProducts();
         logger.info('Successfully fetched all products');
-        return rows;
+        return products;
     } catch (error) {
-        logger.error(`Error fetching products: ${error.message}`);
-        throw new Error(`Error fetching products: ${error.message}`);
+        logger.error(`Error fetching products: ${error.message || error}`);
+        throw new Error(`Error fetching products: ${error.message || error}`);
     }
 };
 
-
 const addProduct = async (product) => {
     try {
-        // Validate the product object if necessary
-        await new Promise((resolve, reject) => {
-            productModel.insertProduct(product, (err) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve();
-            });
-        });
-        logger.info('Successfully added product');
+        await productModel.insertProduct(product);
+        logger.info('Successfully added product', { product });
         return product;
     } catch (error) {
-        logger.error(`Error inserting product: ${error.message}`);
-        throw new Error(`Error inserting product: ${error.message}`);
+        logger.error(`Error inserting product: ${error.message || error}`);
+        throw new Error(`Error inserting product: ${error.message || error}`);
     }
 };
 
 const deleteProduct = async (id) => {
     try {
-        await new Promise((resolve, reject) => {
-            productModel.deleteProduct(id, (err) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve();
-            });
-        });
+        await productModel.deleteProduct(id);
         logger.info(`Successfully deleted product with id ${id}`);
     } catch (error) {
-        logger.error(`Error deleting product: ${error.message}`);
-        throw new Error(`Error deleting product: ${error.message}`);
+        logger.error(`Error deleting product: ${error.message || error}`);
+        throw new Error(`Error deleting product: ${error.message || error}`);
     }
 };
 
 const updateProduct = async (product) => {
     try {
-        // Validate the product object if necessary
-        await new Promise((resolve, reject) => {
-            productModel.updateProduct(product, (err) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve();
-            });
-        });
-        logger.info(`Successfully updated product with id ${product.id}`);
+        await productModel.updateProduct(product);
+        logger.info(`Successfully updated product with id ${product.id}`, { product });
         return product;
     } catch (error) {
-        logger.error(`Error updating product: ${error.message}`);
-        throw new Error(`Error updating product: ${error.message}`);
+        logger.error(`Error updating product: ${error.message || error}`);
+        throw new Error(`Error updating product: ${error.message || error}`);
     }
 };
 

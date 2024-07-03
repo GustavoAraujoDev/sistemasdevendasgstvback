@@ -11,15 +11,19 @@ const getProductCount = (callback) => {
     });
 };
 
-const getAllProducts = (callback) => {
-    db.db.all("SELECT * FROM Product", (err, rows) => {
-        if (err) {
-            console.error(err);
-        } else {
-            callback(rows);
-        }
+const getAllProducts = () => {
+    return new Promise((resolve, reject) => {
+        db.db.all("SELECT * FROM Product", (err, rows) => {
+            if (err) {
+                logger.error(`Erro ao buscar clientes: ${err}`);
+                reject(err);
+            } else {
+                resolve(rows);
+            }
+        });
     });
 };
+
 
 const insertProduct = (product, callback) => {
     const { Nome, Descricao, Preco, PrecoVenda, Quantidade } = product;

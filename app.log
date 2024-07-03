@@ -29,3 +29,36 @@
 2024-07-03T00:37:59.027Z [INFO]: Tabela Product criada com sucesso.
 2024-07-03T00:37:59.036Z [INFO]: Tabela Vendas criada com sucesso.
 2024-07-03T00:37:59.040Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-03T12:33:46.947Z [INFO]: Tabela Client criada com sucesso.
+2024-07-03T12:33:47.147Z [INFO]: Tabela Product criada com sucesso.
+2024-07-03T12:33:47.152Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-03T12:33:47.189Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-03T12:36:36.360Z [INFO]: Tabela Client criada com sucesso.
+2024-07-03T12:36:36.370Z [INFO]: Tabela Product criada com sucesso.
+2024-07-03T12:36:36.372Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-03T12:36:36.374Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-03T12:37:42.555Z [ERROR]: Error fetching products: 
+2024-07-03T12:37:42.560Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:18.734Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:18.795Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:25.751Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:25.753Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:26.982Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:26.984Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:34.064Z [ERROR]: Error fetching products: 
+2024-07-03T12:46:34.075Z [ERROR]: Error fetching products: 
+2024-07-03T12:59:59.698Z [INFO]: Tabela Client criada com sucesso.
+2024-07-03T12:59:59.707Z [INFO]: Tabela Product criada com sucesso.
+2024-07-03T12:59:59.712Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-03T12:59:59.714Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-03T13:00:16.885Z [INFO]: Successfully fetched all products
+2024-07-03T13:04:08.288Z [INFO]: Tabela Client criada com sucesso.
+2024-07-03T13:04:08.300Z [INFO]: Tabela Product criada com sucesso.
+2024-07-03T13:04:08.308Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-03T13:04:08.314Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-03T13:04:18.238Z [INFO]: Successfully fetched all products
+2024-07-03T13:05:51.138Z [INFO]: Tabela Client criada com sucesso.
+2024-07-03T13:05:51.148Z [INFO]: Tabela Product criada com sucesso.
+2024-07-03T13:05:51.156Z [INFO]: Tabela Vendas criada com sucesso.
+2024-07-03T13:05:51.161Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-03T13:05:58.032Z [INFO]: Successfully fetched all products
