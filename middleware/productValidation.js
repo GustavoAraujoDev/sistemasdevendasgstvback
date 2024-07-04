@@ -12,17 +12,17 @@ const productSchema = checkSchema({
         errorMessage: 'Descrição é obrigatória e deve ser uma string'
     },
     preco: {
-        isFloat: true,
+        isString: true,
         notEmpty: true,
         errorMessage: 'Preço é obrigatório e deve ser um número'
     },
     precoVenda: {
-        isFloat: true,
+        isString: true,
         notEmpty: true,
         errorMessage: 'Preço de Venda é obrigatório e deve ser um número'
     },
     quantidade: {
-        isInt: true,
+        isString: true,
         notEmpty: true,
         errorMessage: 'Quantidade é obrigatória e deve ser um número inteiro'
     }
