@@ -1,21 +1,24 @@
 const db = require('../config/dbconfig');
+const logger = require('../config/logger');
 
-const getProductCount = (callback) => {
-    db.db.get("SELECT COUNT(*) as count FROM Product", (err, row) => {
-        if (err) {
-            console.error(err);
-            callback(0);
-        } else {
-            callback(row.count || 0);
-        }
+const getProductCount = () => {
+    return new Promise((resolve, reject) => {
+        db.db.get("SELECT COUNT(*) as count FROM Product", (err, row) => {
+            if (err) {
+                logger.error(`Erro ao obter contagem de Productes: ${err}`);
+                reject(err);
+            } else {
+                resolve(row.count || 0);
+            }
+        });
     });
 };
 
-const getAllProducts = () => {
+const search = () => {
     return new Promise((resolve, reject) => {
         db.db.all("SELECT * FROM Product", (err, rows) => {
             if (err) {
-                logger.error(`Erro ao buscar clientes: ${err}`);
+                logger.error(`Erro ao buscar Productes: ${err}`);
                 reject(err);
             } else {
                 resolve(rows);
@@ -24,67 +27,70 @@ const getAllProducts = () => {
     });
 };
 
-
-const insertProduct = (Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
+const insertData = (Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
     return new Promise((resolve, reject) => {
-    const stmt = db.db.prepare(
-        `INSERT INTO Product (Nome, Descricao, Preco, PrecoVenda, Quantidade)
-        VALUES (?, ?, ?, ?, ?)`
-    );
-    stmt.run(Nome, Descricao, Preco, PrecoVenda, Quantidade, (err) => {
-        if (err) {
-            logger.error(`Erro ao inserir dados: ${err}`);
-            reject(err);
-        } else {
-            logger.info('Dados inseridos com sucesso.');
-            resolve();
-        }
-    stmt.finalize();
-});
-});
+        const stmt = db.db.prepare(
+            `INSERT INTO Product (Nome, Descricao, Preco, PrecoVenda, Quantidade) VALUES (?, ?, ?, ?)`
+        );
+
+        stmt.run(Nome, Descricao, Preco, PrecoVenda, Quantidade, (err) => {
+            if (err) {
+                logger.error(`Erro ao inserir dados: ${err}`);
+                reject(err);
+            } else {
+                logger.info('Dados inseridos com sucesso.');
+                resolve();
+            }
+        });
+
+        stmt.finalize();
+    });
 };
 
-const deleteProduct = (id, callback) => {
-    const stmt = db.db.prepare(
-        `DELETE FROM Product WHERE ProductID = ?`,
-        (err) => {
+const deleteData = (ProductID) => {
+    return new Promise((resolve, reject) => {
+        const stmt = db.db.prepare(
+            `DELETE FROM Product WHERE ProductID = ?`
+        );
+
+        stmt.run(ProductID, (err) => {
             if (err) {
-                console.error(err);
+                logger.error(`Erro ao excluir dados: ${err}`);
+                reject(err);
             } else {
-                console.log("Dados excluídos com sucesso.");
+                logger.info('Dados excluídos com sucesso.');
+                resolve();
             }
-        }
-    );
-    stmt.run(id, callback);
-    stmt.finalize();
+        });
+
+        stmt.finalize();
+    });
 };
 
-const updateProduct = (product, callback) => {
-    const { ProductID, Nome, Descricao, Preco, PrecoVenda, Quantidade } = product;
-    const stmt = db.db.prepare(
-        `UPDATE Product
-          SET Nome = ?,
-              Descricao = ?,
-              Preco = ?,
-              PrecoVenda = ?,
-              Quantidade = ?
-         WHERE ProductID = ?`,
-        (err) => {
+const modifyData = (ProductID, Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
+    return new Promise((resolve, reject) => {
+        const stmt = db.db.prepare(
+            `UPDATE Product SET Nome = ?, Descricao = ?, Preco = ?, PrecoVenda = ?, Quantidade = ?  WHERE ProductID = ?`
+        );
+
+        stmt.run(Nome, Descricao, Preco, PrecoVenda, Quantidade, ProductID, (err) => {
             if (err) {
-                console.error(err);
+                logger.error(`Erro ao modificar dados: ${err}`);
+                reject(err);
             } else {
-                console.log("Dados modificados com sucesso.");
+                logger.info('Dados modificados com sucesso.');
+                resolve();
             }
-        }
-    );
-    stmt.run(Nome, Descricao, Preco, PrecoVenda, Quantidade, ProductID, callback);
-    stmt.finalize();
+        });
+
+        stmt.finalize();
+    });
 };
 
 module.exports = {
     getProductCount,
-    getAllProducts,
-    insertProduct,
-    deleteProduct,
-    updateProduct
+    search,
+    insertData,
+    deleteData,
+    modifyData
 };
