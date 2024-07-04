@@ -5,7 +5,7 @@ const validateRequest = require('../middleware/validateRequest');
 const { productSchema } = require('../middleware/productValidation');
 
 router.get('/', productController.getAllProducts);
-router.post('/', validateRequest(productSchema), productController.addProduct);
+router.post('/', validateRequest(productSchema), productController.createProduct);
 router.delete('/:id', productController.deleteProduct);
 router.put('/:id', validateRequest(productSchema), productController.updateProduct);
 
