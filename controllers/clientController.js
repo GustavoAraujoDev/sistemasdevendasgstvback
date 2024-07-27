@@ -1,53 +1,54 @@
-const clientService = require('../services/clientService');
-const logger = require('../config/logger');
+const clienteService = require('../services/clientService');
 
-const getAllClients = async (req, res) => {
-    try {
-        const clients = await clientService.getAllClients();
-        res.json(clients);
-    } catch (err) {
-        logger.error(`Erro ao buscar clientes: ${err}`);
-        res.status(500).json({ error: err.message });
+class ClienteController {
+    async create(req, res, next) {
+        try {
+            const cliente = await clienteService.create(req.body);
+            res.status(201).json(cliente);
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-const createClient = async (req, res) => {
-    const { nome, email, cpf, telefone } = req.body;
-    try {
-        await clientService.createClient(nome, email, cpf, telefone);
-        res.status(201).json({ message: 'Cliente criado com sucesso' });
-    } catch (err) {
-        logger.error(`Erro ao criar cliente: ${err}`);
-        res.status(500).json({ error: err.message });
+    async findAll(req, res, next) {
+        try {
+            const clientes = await clienteService.findAll();
+            res.json(clientes);
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-const updateClient = async (req, res) => {
-    const { id } = req.params;
-    const { nome, email, cpf, telefone } = req.body;
-    try {
-        await clientService.updateClient(id, nome, email, cpf, telefone);
-        res.json({ message: 'Cliente atualizado com sucesso' });
-    } catch (err) {
-        logger.error(`Erro ao atualizar cliente: ${err}`);
-        res.status(500).json({ error: err.message });
+    async findById(req, res, next) {
+        try {
+            const cliente = await clienteService.findById(req.params.id);
+            if (cliente) {
+                res.json(cliente);
+            } else {
+                res.status(404).json({ error: 'Cliente not found' });
+            }
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-const deleteClient = async (req, res) => {
-    const { id } = req.params;
-    try {
-        await clientService.deleteClient(id);
-        res.json({ message: 'Cliente excluído com sucesso' });
-    } catch (err) {
-        logger.error(`Erro ao excluir cliente: ${err}`);
-        res.status(500).json({ error: err.message });
+    async update(req, res, next) {
+        try {
+            const cliente = await clienteService.update(req.params.id, req.body);
+            res.json(cliente);
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-module.exports = {
-    getAllClients,
-    createClient,
-    updateClient,
-    deleteClient
-};
+    async delete(req, res, next) {
+        try {
+            await clienteService.delete(req.params.id);
+            res.status(204).send();
+        } catch (err) {
+            next(err);
+        }
+    }
+}
+
+module.exports = new ClienteController();

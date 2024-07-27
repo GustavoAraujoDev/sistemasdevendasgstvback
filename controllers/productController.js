@@ -1,52 +1,54 @@
-const Productservice = require('../services/productService');
-const logger = require('../config/logger');
-const getAllProducts = async (req, res) => {
-    try {
-        const Products = await Productservice.getAllProducts();
-        res.json(Products);
-    } catch (err) {
-        logger.error(`Erro ao buscar Products: ${err}`);
-        res.status(500).json({ error: err.message });
-    }
-};
+const produtoService = require('../services/productService');
 
-const createProduct = async (req, res) => {
-    const { Nome, Descricao, Preco, PrecoVenda, Quantidade } = req.body;
-    try {
-        await Productservice.createProduct(Nome, Descricao, Preco, PrecoVenda, Quantidade);
-        res.status(201).json({ message: 'Product criado com sucesso' });
-    } catch (err) {
-        logger.error(`Erro ao criar Product: ${err}`);
-        res.status(500).json({ error: err.message });
+class ProdutoController {
+    async create(req, res, next) {
+        try {
+            const produto = await produtoService.create(req.body);
+            res.status(201).json(produto);
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-const updateProduct = async (req, res) => {
-    const { ProductID } = req.params;
-    const { Nome, Descricao, Preco, PrecoVenda, Quantidade } = req.body;
-    try {
-        await Productservice.updateProduct(ProductID, Nome, Descricao, Preco, PrecoVenda, Quantidade);
-        res.json({ message: 'Product atualizado com sucesso' });
-    } catch (err) {
-        logger.error(`Erro ao atualizar Product: ${err}`);
-        res.status(500).json({ error: err.message });
+    async findAll(req, res, next) {
+        try {
+            const produtos = await produtoService.findAll();
+            res.json(produtos);
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-const deleteProduct = async (req, res) => {
-    const { ProductID } = req.params;
-    try {
-        await Productservice.deleteProduct(ProductID);
-        res.json({ message: 'Product excluído com sucesso' });
-    } catch (err) {
-        logger.error(`Erro ao excluir Product: ${err}`);
-        res.status(500).json({ error: err.message });
+    async findById(req, res, next) {
+        try {
+            const produto = await produtoService.findById(req.params.id);
+            if (produto) {
+                res.json(produto);
+            } else {
+                res.status(404).json({ error: 'Produto not found' });
+            }
+        } catch (err) {
+            next(err);
+        }
     }
-};
 
-module.exports = {
-    getAllProducts,
-    createProduct,
-    updateProduct,
-    deleteProduct
-};
+    async update(req, res, next) {
+        try {
+            const produto = await produtoService.update(req.params.id, req.body);
+            res.json(produto);
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    async delete(req, res, next) {
+        try {
+            await produtoService.delete(req.params.id);
+            res.status(204).send();
+        } catch (err) {
+            next(err);
+        }
+    }
+}
+
+module.exports = new ProdutoController();

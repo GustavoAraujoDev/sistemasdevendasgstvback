@@ -1,69 +1,79 @@
-const salesService = require('../services/salesService');
+const vendaService = require('../services/salesService');
 
-const getTotalVendas = async (req, res) => {
+const criarVenda = async (req, res) => {
     try {
-        const total = await salesService.getTotalVendas();
-        res.status(200).json({ total });
+        const venda = await vendaService.create(req.body);
+        res.status(201).json(venda);
     } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-};
-
-const inserirVenda = async (req, res) => {
-    const { items, totalPrice, pagamento, situacao, clienteId } = req.body;
-    try {
-        const vendaId = await salesService.inserirVenda(items, totalPrice, pagamento, situacao, clienteId);
-        res.status(201).json({ vendaId });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+        if (err.name === 'ValidationError') {
+            res.status(400).json({ message: err.message });
+        } else {
+            res.status(500).json({ message: 'Erro ao criar venda', error: err.message });
+        }
     }
 };
 
 const listarVendas = async (req, res) => {
     try {
-        const vendas = await salesService.listarVendas();
+        const vendas = await vendaService.findAll();
         res.status(200).json(vendas);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ message: 'Erro ao listar vendas', error: err.message });
     }
 };
 
 const listarItensVenda = async (req, res) => {
-    const { vendaId } = req.params;
     try {
-        const itensVenda = await salesService.listarItensVenda(vendaId);
-        res.status(200).json(itensVenda);
+        const itens = await vendaService.findAllItems();
+        res.status(200).json(itens);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ message: 'Erro ao listar itens de venda', error: err.message });
     }
 };
 
-const modificarVenda = async (req, res) => {
-    const { situacao } = req.body;
-    const { vendaId } = req.params;
+const buscarVendaPorId = async (req, res) => {
     try {
-        await salesService.modificarVenda(situacao, vendaId);
-        res.status(200).json({ message: 'Venda modificada com sucesso.' });
+        const { id } = req.params;
+        const venda = await vendaService.findById(id);
+        if (venda) {
+            res.status(200).json(venda);
+        } else {
+            res.status(404).json({ message: 'Venda não encontrada' });
+        }
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ message: 'Erro ao buscar venda', error: err.message });
     }
 };
 
-const excluirVenda = async (req, res) => {
-    const { vendaId } = req.params;
+const atualizarVenda = async (req, res) => {
     try {
-        await salesService.excluirVenda(vendaId);
-        res.status(200).json({ message: 'Venda excluída com sucesso.' });
+        const { id } = req.params;
+        const venda = await vendaService.update(id, req.body);
+        res.status(200).json(venda);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        if (err.name === 'ValidationError') {
+            res.status(400).json({ message: err.message });
+        } else {
+            res.status(500).json({ message: 'Erro ao atualizar venda', error: err.message });
+        }
+    }
+};
+
+const deletarVenda = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await vendaService.delete(id);
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao deletar venda', error: err.message });
     }
 };
 
 module.exports = {
-    getTotalVendas,
-    inserirVenda,
+    criarVenda,
     listarVendas,
     listarItensVenda,
-    modificarVenda,
-    excluirVenda
+    buscarVendaPorId,
+    atualizarVenda,
+    deletarVenda,
 };

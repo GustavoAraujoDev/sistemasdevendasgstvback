@@ -1,28 +1,10 @@
-const { checkSchema } = require('express-validator');
+const Joi = require('joi');
 
-const clientSchema = checkSchema({
-    nome: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Nome é obrigatório e deve ser uma string'
-    },
-    email: {
-        isEmail: true,
-        notEmpty: true,
-        errorMessage: 'Email é obrigatório e deve ser um email válido'
-    },
-    cpf: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'CPF é obrigatório e deve ser uma string'
-    },
-    telefone: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Telefone é obrigatório e deve ser uma string'
-    }
+const clienteSchema = Joi.object({
+    nome: Joi.string().required(),
+    email: Joi.string().email().required(),
+    cpf: Joi.string().pattern(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$|^\d{11}$/).required(),  // CPF com ou sem formatação
+    telefone: Joi.string().pattern(/^\d{10,11}$/).required()  // Apenas números, 10 ou 11 dígitos
 });
 
-module.exports = {
-    clientSchema
-};
+module.exports = clienteSchema;

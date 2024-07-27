@@ -1,15 +1,14 @@
 const express = require('express');
-const salesController = require('../controllers/salesController');
-
+const vendaController = require('../controllers/salesController');
+const { vendaSchema } = require('../middleware/salesValidation');
+const validate = require('../middleware/validateRequest')
 const router = express.Router();
-const validateRequest = require('../middleware/validateRequest');
-const { salesSchema } = require('../middleware/salesValidation');
 
-router.get('/total', salesController.getTotalVendas);
-router.post('/', validateRequest(salesSchema), salesController.inserirVenda);
-router.get('/', salesController.listarVendas);
-router.get('/:vendaId/itens', salesController.listarItensVenda);
-router.put('/:VendaId', salesController.modificarVenda);
-router.delete('/:VendaId', salesController.excluirVenda);
+router.post('/vendas', validate(vendaSchema), vendaController.criarVenda);
+router.get('/vendas', vendaController.listarVendas);
+router.get('/vendas/itens', vendaController.listarItensVenda);
+router.get('/vendas/:id', vendaController.buscarVendaPorId);
+router.put('/vendas/:id', validate(vendaSchema), vendaController.atualizarVenda);
+router.delete('/vendas/:id', vendaController.deletarVenda);
 
 module.exports = router;

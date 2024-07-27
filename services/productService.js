@@ -1,25 +1,33 @@
-const productModel = require('../models/productModel');
-const logger = require('../config/logger');
+const Produto = require('../models/productModel');
 
-const getAllProducts = async () => {
-    return await productModel.search();
-};
+class ProdutoService {
+    async create(produtoData) {
+        return await Produto.create(produtoData);
+    }
 
-const createProduct = async (Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
-    return await productModel.insertData(Nome, Descricao, Preco, PrecoVenda, Quantidade);
-};
+    async findAll() {
+        return await Produto.findAll();
+    }
 
-const updateProduct = async (ProductID, Nome, Descricao, Preco, PrecoVenda, Quantidade) => {
-    return await productModel.modifyData(ProductID, Nome, Descricao, Preco, PrecoVenda, Quantidade);
-};
+    async findById(id) {
+        return await Produto.findByPk(id);
+    }
 
-const deleteProduct = async (ProductID) => {
-    return await productModel.deleteData(ProductID);
-};
+    async update(id, produtoData) {
+        const produto = await this.findById(id);
+        if (produto) {
+            return await produto.update(produtoData);
+        }
+        throw new Error('Produto not found');
+    }
 
-module.exports = {
-    getAllProducts,
-    createProduct,
-    updateProduct,
-    deleteProduct
-};
+    async delete(id) {
+        const produto = await this.findById(id);
+        if (produto) {
+            return await produto.destroy();
+        }
+        throw new Error('Produto not found');
+    }
+}
+
+module.exports = new ProdutoService();

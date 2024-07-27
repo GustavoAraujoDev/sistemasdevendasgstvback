@@ -1,24 +1,33 @@
-const clientModel = require('../models/clientModel');
+const Cliente = require('../models/clientModel');
 
-const getAllClients = async () => {
-    return await clientModel.search();
-};
+class ClienteService {
+    async create(clienteData) {
+        return await Cliente.create(clienteData);
+    }
 
-const createClient = async (nome, email, cpf, telefone) => {
-    return await clientModel.insertData(nome, email, cpf, telefone);
-};
+    async findAll() {
+        return await Cliente.findAll();
+    }
 
-const updateClient = async (id, nome, email, cpf, telefone) => {
-    return await clientModel.modifyData(id, nome, email, cpf, telefone);
-};
+    async findById(id) {
+        return await Cliente.findByPk(id);
+    }
 
-const deleteClient = async (id) => {
-    return await clientModel.deleteData(id);
-};
+    async update(id, clienteData) {
+        const cliente = await this.findById(id);
+        if (cliente) {
+            return await cliente.update(clienteData);
+        }
+        throw new Error('Cliente not found');
+    }
 
-module.exports = {
-    getAllClients,
-    createClient,
-    updateClient,
-    deleteClient
-};
+    async delete(id) {
+        const cliente = await this.findById(id);
+        if (cliente) {
+            return await cliente.destroy();
+        }
+        throw new Error('Cliente not found');
+    }
+}
+
+module.exports = new ClienteService();

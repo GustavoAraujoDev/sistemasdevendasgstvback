@@ -1,34 +1,12 @@
-const { checkSchema } = require('express-validator');
+const Joi = require('joi');
 
-const productSchema = checkSchema({
-    nome: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Nome é obrigatório e deve ser uma string'
-    },
-    descricao: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Descrição é obrigatória e deve ser uma string'
-    },
-    preco: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Preço é obrigatório e deve ser um número'
-    },
-    precoVenda: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Preço de Venda é obrigatório e deve ser um número'
-    },
-    quantidade: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Quantidade é obrigatória e deve ser um número inteiro'
-    }
+const produtoSchema = Joi.object({
+    productid: Joi.number().integer().positive().optional(),
+    nome: Joi.string().required(),
+    descricao: Joi.string().optional(),
+    preco: Joi.number().positive().required(),
+    precovenda: Joi.number().positive().optional(),
+    quantidade: Joi.number().integer().positive().optional()
 });
 
-module.exports = {
-    productSchema
-};
-
+module.exports = produtoSchema;

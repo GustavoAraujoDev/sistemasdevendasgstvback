@@ -1,24 +1,25 @@
-const { checkSchema } = require('express-validator');
+const Joi = require('joi');
 
-const salesSchema = checkSchema({
-    total_price: {
-        isFloat: true,
-        notEmpty: true,
-        errorMessage: 'Nome é obrigatório e deve ser uma string'
-    },
-    pagamento: {
-        isString: true,
-        notEmpty: true,
-        errorMessage: 'Descrição é obrigatória e deve ser uma string'
-    },
-    situacao: {
-        isFloat: true,
-        notEmpty: true,
-        errorMessage: 'Preço é obrigatório e deve ser um número'
-    }
+// Schema para validação de itens da venda
+const itemVendaSchema = Joi.object({
+    productid: Joi.number().integer().required(),
+    nome: Joi.string().max(255).required(),
+    descricao: Joi.string().max(255),
+    preco: Joi.number().precision(2).required(),
+    precovenda: Joi.number().precision(2).required(),
+    quantidade: Joi.number().integer().positive().required(),
+});
+
+// Schema para validação de venda
+const vendaSchema = Joi.object({
+    totalprice: Joi.number().precision(2).required(),
+    pagamento: Joi.string().max(255).required(),
+    situacao: Joi.string().max(255).required(),
+    datavenda: Joi.date().required(),
+    clienteid: Joi.number().integer().required(),
+    items: Joi.array().items(itemVendaSchema).required(),
 });
 
 module.exports = {
-    salesSchema
+    vendaSchema,
 };
-

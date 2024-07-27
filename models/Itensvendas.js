@@ -1,11 +1,29 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbconfig');
+const Produto = require('../models/productModel'); // Certifique-se de que o caminho está correto
+const Venda = require('../models/salesModel'); // Certifique-se de que o caminho está correto
 
-const Produto = sequelize.define('Produto', {
-    productid: {
+const ItemVenda = sequelize.define('ItemVenda', {
+    id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+    },
+    vendaid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Venda,
+            key: 'vendaid',
+        },
+    },
+    productid: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+            model: Produto,
+            key: 'productid',
+        },
     },
     nome: {
         type: DataTypes.STRING,
@@ -38,7 +56,7 @@ const Produto = sequelize.define('Produto', {
     },
 }, {
     timestamps: true,
-    tableName: 'produtos',
+    tableName: 'itens_venda',
 });
 
-module.exports = Produto;
+module.exports = ItemVenda;

@@ -71,3 +71,48 @@
 2024-07-03T17:43:19.084Z [INFO]: Tabela Product criada com sucesso.
 2024-07-03T17:43:19.087Z [INFO]: Tabela Vendas criada com sucesso.
 2024-07-03T17:43:19.089Z [INFO]: Tabela ItensVenda criada com sucesso.
+2024-07-23T20:33:55.242Z [INFO]: Server is running on port 3000
+2024-07-24T13:10:12.429Z [INFO]: Server is running on port 3000
+2024-07-24T13:50:17.485Z [INFO]: Server is running on port 3000
+2024-07-24T13:58:04.931Z [INFO]: Server is running on port 3000
+2024-07-24T14:08:43.907Z [INFO]: Server is running on port 3000
+2024-07-24T14:11:52.615Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:15:43.100Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:15:49.265Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:23:01.195Z [INFO]: Server is running on port 3000
+2024-07-24T14:35:57.499Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:38:43.831Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:38:56.868Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:40:10.624Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:45:00.876Z [INFO]: Server is running on port 3000
+2024-07-24T14:45:43.779Z [ERROR]: Erro: schema.validate is not a function
+2024-07-24T14:51:37.526Z [INFO]: Server is running on port 3000
+2024-07-24T14:51:46.467Z [ERROR]: Erro: Validation error: CPF must be 11 digits,
+Validation error: Telefone must be a valid phone number
+2024-07-24T14:59:56.950Z [INFO]: Server is running on port 3000
+2024-07-24T15:00:03.140Z [ERROR]: Erro: Validation error: CPF must be 11 digits,
+Validation error: Telefone must be a valid phone number
+2024-07-24T15:04:01.635Z [INFO]: Server is running on port 3000
+2024-07-24T15:04:05.978Z [ERROR]: Erro: Validation error: CPF must be 11 digits,
+Validation error: Telefone must be a valid phone number
+2024-07-24T15:04:27.366Z [ERROR]: Erro: Validation error: Telefone must be a valid phone number
+2024-07-24T15:16:50.094Z [INFO]: Server is running on port 3000
+2024-07-24T16:30:07.381Z [INFO]: Server is running on port 3000
+2024-07-24T16:35:15.451Z [INFO]: Server is running on port 3000
+2024-07-24T17:07:59.161Z [INFO]: Server is running on port 3000
+2024-07-24T17:14:08.887Z [INFO]: Server is running on port 3000
+2024-07-24T17:32:50.035Z [INFO]: Server is running on port 3000
+2024-07-24T17:50:31.733Z [INFO]: Server is running on port 3000
+2024-07-24T18:00:22.812Z [INFO]: Server is running on port 3000
+2024-07-24T20:11:03.967Z [INFO]: Server is running on port 3000
+2024-07-26T22:16:48.887Z [INFO]: Server is running on port 3000
+2024-07-26T22:49:13.342Z [INFO]: Server is running on port 3000
+2024-07-26T23:01:32.872Z [ERROR]: Erro: Expected double-quoted property name in JSON at position 121
+2024-07-26T23:12:47.575Z [INFO]: Server is running on port 3000
+2024-07-26T23:14:51.786Z [INFO]: Server is running on port 3000
+2024-07-26T23:30:55.435Z [INFO]: Server is running on port 3000
+2024-07-26T23:34:10.169Z [INFO]: Server is running on port 3000
+2024-07-26T23:38:08.547Z [INFO]: Server is running on port 3000
+2024-07-26T23:40:09.378Z [ERROR]: Erro: Expected double-quoted property name in JSON at position 101
+2024-07-26T23:40:13.693Z [ERROR]: Erro: Expected double-quoted property name in JSON at position 101
+2024-07-26T23:59:31.022Z [INFO]: Server is running on port 3000
