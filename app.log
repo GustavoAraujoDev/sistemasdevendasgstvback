@@ -116,3 +116,6 @@ Validation error: Telefone must be a valid phone number
 2024-07-26T23:40:09.378Z [ERROR]: Erro: Expected double-quoted property name in JSON at position 101
 2024-07-26T23:40:13.693Z [ERROR]: Erro: Expected double-quoted property name in JSON at position 101
 2024-07-26T23:59:31.022Z [INFO]: Server is running on port 3000
+2024-07-27T00:12:45.761Z [INFO]: Server is running on port 3000
+2024-07-27T00:16:29.810Z [ERROR]: Erro: Expected ',' or '}' after property value in JSON at position 291
+2024-07-27T00:16:37.321Z [ERROR]: Erro: Expected ',' or '}' after property value in JSON at position 291
