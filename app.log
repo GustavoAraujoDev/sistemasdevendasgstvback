@@ -119,3 +119,4 @@ Validation error: Telefone must be a valid phone number
 2024-07-27T00:12:45.761Z [INFO]: Server is running on port 3000
 2024-07-27T00:16:29.810Z [ERROR]: Erro: Expected ',' or '}' after property value in JSON at position 291
 2024-07-27T00:16:37.321Z [ERROR]: Erro: Expected ',' or '}' after property value in JSON at position 291
+2024-07-28T16:19:57.719Z [INFO]: Server is running on port 3000
