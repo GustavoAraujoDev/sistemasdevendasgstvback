@@ -85,6 +85,18 @@ class VendaService {
         });
     }
 
+    async ItensVendaPorId(vendaId) {
+        try {
+            const itensVenda = await ItemVenda.findAll({
+                where: { vendaId: vendaId }
+            });
+            return itensVenda;
+        } catch (error) {
+            console.error('Erro ao listar itens de venda:', error);
+            throw error;
+        }
+    };
+
     // Atualiza uma venda e seus itens
     async update(id, vendaData) {
         const { items, totalprice, pagamento, situacao, clienteid } = vendaData;

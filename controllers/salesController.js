@@ -45,6 +45,17 @@ const buscarVendaPorId = async (req, res) => {
     }
 };
 
+const buscarItensVendaPorId = async (req, res) => {
+    try {
+        const vendaId = req.params.id;
+        const itensVenda = await salesService.ItensVendaPorId(vendaId);
+        res.json(itensVenda);
+    } catch (error) {
+        console.error('Erro ao listar itens de venda:', error);
+        res.status(500).json({ error: 'Erro ao listar itens de venda' });
+    }
+};
+
 const atualizarVenda = async (req, res) => {
     try {
         const { id } = req.params;
@@ -74,6 +85,7 @@ module.exports = {
     listarVendas,
     listarItensVenda,
     buscarVendaPorId,
+    buscarItensVendaPorId,
     atualizarVenda,
     deletarVenda,
 };
