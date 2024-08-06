@@ -28,6 +28,14 @@ app.use((req, res) => {
     res.status(404).json({ message: "Rota não encontrada" });
 });
 
+// Sincronização do banco de dados
+sequelize.sync({ alter: true })
+    .then(() => {
+        console.log('Database synchronized');
+    })
+    .catch((err) => {
+        console.error('Error synchronizing database:', err);
+    });
 
 const startServer = async () => {
     try {
