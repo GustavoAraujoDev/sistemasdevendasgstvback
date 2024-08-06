@@ -15,7 +15,9 @@ const criarVenda = async (req, res) => {
 
 const listarVendas = async (req, res) => {
     try {
-        const vendas = await vendaService.findAll();
+        const vendas = await vendaService.findAll({
+            include: [{ model: ItemVenda,  as: 'itens' }]
+        });
         res.status(200).json(vendas);
     } catch (err) {
         res.status(500).json({ message: 'Erro ao listar vendas', error: err.message });
