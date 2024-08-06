@@ -81,7 +81,10 @@ class VendaService {
     // Busca uma venda por ID com seus itens
     async findById(id) {
         return await Venda.findByPk(id, {
-            include: [ItemVenda],
+            include: [{
+                model: ItemVenda,
+                as: 'itens' // Usando o alias definido na associação
+            }],
         });
     }
 

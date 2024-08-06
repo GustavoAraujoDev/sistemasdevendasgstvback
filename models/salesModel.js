@@ -39,6 +39,6 @@ const Venda = sequelize.define('Venda', {
     tableName: 'vendas',
 });
 
-Venda.hasMany(ItemVenda, { foreignKey: 'vendaid' });
+Venda.hasMany(ItemVenda, { foreignKey: 'vendaid', as: 'itens' });
 
 module.exports = Venda;
