@@ -1,6 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbconfig');
-const ItemVenda = require('../models/salesModel');
+const ItemVenda = require('../models/Itensvendas');
 
 const Venda = sequelize.define('Venda', {
     Vendaid: {
@@ -40,6 +40,8 @@ const Venda = sequelize.define('Venda', {
     tableName: 'vendas',
 });
 
+// Definição das associações
 Venda.hasMany(ItemVenda, { foreignKey: 'vendaid', as: 'itens' });
+ItemVenda.belongsTo(Venda, { foreignKey: 'vendaid', as: 'venda' });
 
 module.exports = Venda;

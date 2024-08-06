@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/dbconfig');
 const Produto = require('../models/productModel'); // Certifique-se de que o caminho está correto
 const Venda = require('../models/salesModel'); // Certifique-se de que o caminho está correto
