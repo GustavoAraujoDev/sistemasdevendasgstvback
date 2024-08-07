@@ -29,7 +29,7 @@ app.use((req, res) => {
 });
 
 // Sincronização do banco de dados
-sequelize.sync({ alter: true })
+sequelize.sync({ alter: true, force: true })
     .then(() => {
         console.log('Database synchronized');
     })
