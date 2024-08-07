@@ -1,9 +1,10 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbconfig');
 const ItemVenda = require('../models/Itensvendas');
+const Cliente = require('../models/clientModel');
 
 const Venda = sequelize.define('Venda', {
-    Vendaid: {
+    vendaid: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
@@ -31,7 +32,7 @@ const Venda = sequelize.define('Venda', {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'Clientes',
+            model: Cliente,
             key: 'id',
         },
     },
