@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+const { Sequelize } = require('sequelize');
 const express = require('express');
 const cors = require('cors');
 const routesProduct = require('./Routes/ProductRoutes');
