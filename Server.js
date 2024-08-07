@@ -33,21 +33,7 @@ app.use((req, res) => {
 
 const startServer = async () => {
   try {
-    const controlFilePath = path.join(__dirname, 'db_initialized.txt');
 
-    if (!fs.existsSync(controlFilePath)) {
-      await sequelize
-        .sync({ force: true }) // Se deseja forçar a recriação das tabelas
-        .then(() => {
-          console.log('Database synchronized');
-          fs.writeFileSync(controlFilePath, 'Database initialized.');
-        })
-        .catch((err) => {
-          console.error('Error synchronizing database:', err);
-        });
-    } else {
-      console.log('Database already initialized.');
-    }
 
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
