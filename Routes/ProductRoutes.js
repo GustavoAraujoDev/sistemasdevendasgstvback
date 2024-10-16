@@ -6,8 +6,8 @@ const router = express.Router();
 
 router.post('/', validate(produtoSchema), produtoController.create);
 router.get('/', produtoController.findAll);
-router.get('/:id', produtoController.findById);
-router.put('/:id', validate(produtoSchema), produtoController.update);
-router.delete('/:id', produtoController.delete);
+router.get('/:productid', produtoController.findById);
+router.put('/:productid', validate(produtoSchema), produtoController.update);
+router.delete('/:productid', produtoController.delete);
 
 module.exports = router;

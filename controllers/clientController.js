@@ -1,60 +1,61 @@
 const clienteService = require('../services/clientService');
-const logger = require('../config/logger');
-
+const Cliente = require('../models/clientModel');
+const logger = require('../config/logger'); // Importando o logger
 class ClienteController {
-    async create(req, res, next) {
+    static async create(req, res) {
         try {
-            const cliente = await clienteService.create(req.body);
-            res.status(201).json(cliente);
-        } catch (err) {
-            logger.error(`Error creating cliente: ${err.message}`);
-            next(err);
+            const { nome, email, cpf, telefone } = req.body;
+            const cliente = new Cliente (nome, email, cpf, telefone);
+            await clienteService.save(cliente);
+            res.status(201).json({ message: 'Cliente adicionado com sucesso!', cliente });
+        } catch (error) {
+            logger.error('Erro ao adicionar Cliente:', error);
+            res.status(500).json({ message: 'Erro ao adicionar Cliente', error: error.message });
         }
     }
 
-    async findAll(req, res, next) {
+    static async findById(req, res) {
+        try {
+            const cliente = await clienteService.findById(req.params.id);
+            if (!cliente) {
+                return res.status(404).json({ message: 'Cliente não encontrado' });
+            }
+            res.json(cliente);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    static async findAll(req, res) {
         try {
             const clientes = await clienteService.findAll();
             res.json(clientes);
-        } catch (err) {
-            logger.error(`Error finding all clientes: ${err.message}`);
-            next(err);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
         }
     }
 
-    async findById(req, res, next) {
+    static async update(req, res) {
         try {
-            const cliente = await clienteService.findById(req.params.id);
-            if (cliente) {
-                res.json(cliente);
-            } else {
-                res.status(404).json({ error: 'Cliente not found' });
-            }
-        } catch (err) {
-            logger.error(`Error finding cliente by id: ${err.message}`);
-            next(err);
+            const clienteId = await clienteService.update(req.params.id, req.body);
+            res.json({ message: 'Cliente atualizado com sucesso', id: clienteId });
+        } catch (error) {
+            res.status(400).json({ error: error.message });
         }
     }
 
-    async update(req, res, next) {
+    static async delete(req, res) {
+        logger.info(req.params);
+        const { clientid } = req.params;
+        logger.info(clientid);
         try {
-            const cliente = await clienteService.update(req.params.id, req.body);
-            res.json(cliente);
-        } catch (err) {
-            logger.error(`Error updating cliente: ${err.message}`);
-            next(err);
-        }
-    }
-
-    async delete(req, res, next) {
-        try {
-            await clienteService.delete(req.params.id);
-            res.status(204).send();
-        } catch (err) {
-            logger.error(`Error deleting cliente: ${err.message}`);
-            next(err);
+            await clienteService.delete(clientid);
+            res.status(200).json({ message: 'Cliente deletado com sucesso!' });
+        } catch (error) {
+            logger.error('Erro ao deletar Cliente:', error);
+            res.status(500).json({ message: 'Erro ao deletar Cliente', error: error.message });
         }
     }
 }
 
-module.exports = new ClienteController();
+module.exports = ClienteController;

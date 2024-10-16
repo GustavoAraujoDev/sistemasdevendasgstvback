@@ -1,195 +1,148 @@
-const Venda = require('../models/salesModel');
-const ItemVenda = require('../models/Itensvendas');
-const Produto = require('../models/productModel');
-const sequelize = require('../config/dbconfig');
-const { ValidationError } = require('sequelize');
+const { ref, set, get, update, remove } = require('firebase/database');
+const db = require('../config/dbconfig'); // Importando a configuração do Firebase
+const Venda = require('../models/salesModel'); // Importando o modelo Venda
+const ItemVenda = require('../models/Itensvendas'); // Importando o modelo ItemVenda
+const logger = require('../config/logger'); // Importando o logger
 
 class VendaService {
-    // Cria uma nova venda e seus itens, atualiza o estoque dos produtos
-    async create(vendaData) {
-        const { items, totalprice, pagamento, situacao, clienteid } = vendaData;
-        const transaction = await sequelize.transaction();
-
+    // Método para criar uma nova venda
+    static async create(Venda) {
+        const VendaRef = ref(db, `Vendas/${Venda.Vendaid}`);
         try {
-            // Validação dos dados de entrada
-            if (items.length === 0) {
-                throw new ValidationError('A venda deve ter pelo menos um item.');
-            }
-
-            for (let item of items) {
-                if (!item.productid) {
-                    throw new ValidationError('O campo product_id é obrigatório para todos os itens.');
-                }
-                const produto = await Produto.findByPk(item.productid);
-                if (!produto) {
-                    throw new ValidationError(`Produto com ID ${item.productid} não encontrado.`);
-                }
-                if (item.quantidade > produto.quantidade) {
-                    throw new ValidationError(`Quantidade indisponível para o produto ${produto.nome}.`);
-                }
-            }
-
-            // Cria a venda
-            const venda = await Venda.create({
-                datavenda: new Date(),
-                totalprice: totalprice,
-                pagamento,
-                situacao,
-                clienteid: clienteid,
-            }, { transaction });
-
-            const vendaId = venda.Vendaid;
-
-            // Cria os itens da venda
-            const itensVenda = items.map(item => ({
-                vendaid: vendaId,
-                productid: item.productid,
-                nome: item.nome,
-                descricao: item.descricao,
-                preco: item.preco,
-                precovenda: item.precovenda,
-                quantidade: item.quantidade,
-            }));
-
-            await ItemVenda.bulkCreate(itensVenda, { transaction });
-
-            // Atualiza o estoque dos produtos
-            for (let item of items) {
-                const produto = await Produto.findByPk(item.productid);
-                produto.quantidade -= item.quantidade;
-                await produto.save({ transaction });
-            }
-
-            // Commit da transação
-            await transaction.commit();
-
-            return venda;
-        } catch (err) {
-            // Rollback em caso de erro
-            await transaction.rollback();
-            throw err;
-        }
-    }
-
-    // Lista todas as vendas com seus itens
-    async findAll() {
-        return await Venda.findAll({
-            include: [ItemVenda],
-        });
-    }
-
-    // Busca uma venda por ID com seus itens
-    async findById(id) {
-        return await Venda.findByPk(id, {
-            include: [{
-                model: ItemVenda,
-                as: 'itens' // Usando o alias definido na associação
-            }],
-        });
-    }
-
-    async ItensVendaPorId(vendaId) {
-        try {
-            const itensVenda = await ItemVenda.findAll({
-                where: { vendaId: vendaId }
-            });
-            return itensVenda;
+            await set(VendaRef, Venda);
+            logger.info('Venda criada com sucesso!');
+            return Venda; // Retorna a Venda criada
         } catch (error) {
-            console.error('Erro ao listar itens de venda:', error);
+            logger.error('Erro ao criar Venda:', error);
             throw error;
         }
-    };
+    }
 
-    // Atualiza uma venda e seus itens
-    async update(id, vendaData) {
-        const { items, totalprice, pagamento, situacao, clienteid } = vendaData;
-        const transaction = await sequelize.transaction();
-
+    // Método para obter todas as Vendas
+    static async getAll() {
+        const VendasRef = ref(db, 'Vendas');
         try {
-            const venda = await this.findById(id);
-            if (!venda) {
-                throw new Error('Venda not found');
+            const snapshot = await get(VendasRef);
+            if (snapshot.exists()) {
+                return snapshot.val(); // Retorna todas as Vendas
+            } else {
+                logger.info('Nenhuma Venda encontrada.');
+                return {};
             }
+        } catch (error) {
+            logger.error('Erro ao buscar Vendas:', error);
+            throw error;
+        }
+    }
 
-            // Atualiza a venda
-            await venda.update({
-                totalprice: totalprice,
-                pagamento,
-                situacao,
-                cliente_id: clienteid,
-            }, { transaction });
+    // Método para obter uma Venda específica
+    static async getById(Vendaid) {
+        const VendaRef = ref(db, `Vendas/${Vendaid}`);
+        try {
+            const snapshot = await get(VendaRef);
+            if (snapshot.exists()) {
+                return snapshot.val(); // Retorna a Venda encontrada
+            } else {
+                throw new Error('Venda não encontrada');
+            }
+        } catch (error) {
+            logger.error('Erro ao buscar a Venda:', error);
+            throw error;
+        }
+    }
 
-            // Deleta itens antigos
-            await ItemVenda.destroy({
-                where: { venda_id: id },
-                transaction,
+    // Método para atualizar a Venda
+    static async update(Venda) {
+        const VendaRef = ref(db, `Vendas/${Venda.Vendaid}`);
+        Venda.updatedAt = new Date().toISOString(); // Atualiza a data de modificação
+        try {
+            await update(VendaRef, {
+                dataVenda: Venda.dataVenda,
+                totalprice: Venda.totalprice,
+                pagamento: Venda.pagamento,
+                situacao: Venda.situacao,
+                clienteid: Venda.clienteid,
+                updatedAt: Venda.updatedAt
             });
+            logger.info('Venda atualizada com sucesso!');
+            return Venda; // Retorna a Venda atualizada
+        } catch (error) {
+            logger.error('Erro ao atualizar a Venda:', error);
+            throw error;
+        }
+    }
 
-            // Cria novos itens
-            const itensVenda = items.map(item => ({
-                venda_id: id,
-                product_id: item.product_id,
-                nome: item.nome,
-                descricao: item.descricao,
-                preco: item.preco,
-                precovenda: item.precovenda,
+    // Método para deletar a Venda
+    static async delete(Vendaid) {
+        const VendaRef = ref(db, `Vendas/${Vendaid}`);
+        try {
+            await remove(VendaRef);
+            logger.info('Venda deletada com sucesso!');
+        } catch (error) {
+            logger.error('Erro ao deletar Venda:', error);
+            throw error;
+        }
+    }
+
+    // Métodos para gerenciar os itens de Venda
+
+    // Método para adicionar um item à Venda
+    static async addItem(VendaId, item) {
+        const itemRef = ref(db, `Vendas/${VendaId}/itens/${item.itemId}`);
+        try {
+            await set(itemRef, item);
+            logger.info('Item adicionado à Venda com sucesso!');
+            return item; // Retorna o item adicionado
+        } catch (error) {
+            logger.error('Erro ao adicionar item à Venda:', error);
+            throw error;
+        }
+    }
+
+    // Método para obter todos os itens de uma Venda
+    static async getItems(VendaId) {
+        const itensRef = ref(db, `Vendas/${VendaId}/itens`);
+        try {
+            const snapshot = await get(itensRef);
+            if (snapshot.exists()) {
+                return snapshot.val(); // Retorna todos os itens da Venda
+            } else {
+                logger.info('Nenhum item encontrado para esta Venda.');
+                return {};
+            }
+        } catch (error) {
+            logger.error('Erro ao buscar itens da Venda:', error);
+            throw error;
+        }
+    }
+
+    // Método para atualizar um item de Venda
+    static async updateItem(VendaId, item) {
+        const itemRef = ref(db, `Vendas/${VendaId}/itens/${item.itemId}`);
+        try {
+            await update(itemRef, {
                 quantidade: item.quantidade,
-            }));
-
-            await ItemVenda.bulkCreate(itensVenda, { transaction });
-
-            // Atualiza o estoque dos produtos
-            for (let item of items) {
-                const produto = await Produto.findByPk(item.productid);
-                produto.quantidade -= item.quantidade;
-                await produto.save({ transaction });
-            }
-
-            // Commit da transação
-            await transaction.commit();
-
-            return venda;
-        } catch (err) {
-            // Rollback em caso de erro
-            await transaction.rollback();
-            throw err;
-        }
-    }
-
-    // Deleta uma venda e seus itens
-    async delete(id) {
-        const transaction = await sequelize.transaction();
-
-        try {
-            const venda = await this.findById(id);
-            if (!venda) {
-                throw new Error('Venda not found');
-            }
-
-            // Deleta itens da venda
-            await ItemVenda.destroy({
-                where: { vendaid: id },
-                transaction,
+                precoUnitario: item.precoUnitario
             });
-
-            // Deleta a venda
-            await venda.destroy({ transaction });
-
-            // Commit da transação
-            await transaction.commit();
-
-            return venda;
-        } catch (err) {
-            // Rollback em caso de erro
-            await transaction.rollback();
-            throw err;
+            logger.info('Item da Venda atualizado com sucesso!');
+            return item; // Retorna o item atualizado
+        } catch (error) {
+            logger.error('Erro ao atualizar item da Venda:', error);
+            throw error;
         }
     }
 
-    // Lista todos os itens de venda
-    async findAllItems() {
-        return await ItemVenda.findAll();
+    // Método para deletar um item de Venda
+    static async deleteItem(VendaId, itemId) {
+        const itemRef = ref(db, `Vendas/${VendaId}/itens/${itemId}`);
+        try {
+            await remove(itemRef);
+            logger.info('Item da Venda deletado com sucesso!');
+        } catch (error) {
+            logger.error('Erro ao deletar item da Venda:', error);
+            throw error;
+        }
     }
 }
 
-module.exports = new VendaService();
+module.exports = VendaService;

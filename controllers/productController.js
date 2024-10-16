@@ -1,54 +1,68 @@
-const produtoService = require('../services/productService');
+// controllers/produtoController.js
+const Produto = require('../models/productModel');
+const ProdutoService = require('../services/productService');
+const logger = require('../config/logger'); // Importando o logger
 
-class ProdutoController {
-    async create(req, res, next) {
+class produtoController {
+    static async create(req, res) {
         try {
-            const produto = await produtoService.create(req.body);
-            res.status(201).json(produto);
-        } catch (err) {
-            next(err);
+            const { nome, descricao, preco, precovenda, quantidade } = req.body;
+
+            const produto = new Produto(nome, descricao, preco, precovenda, quantidade);
+            await ProdutoService.save(produto);
+            res.status(201).json({ message: 'Produto adicionado com sucesso!', produto });
+        } catch (error) {
+            logger.error('Erro ao adicionar produto:', error);
+            res.status(500).json({ message: 'Erro ao adicionar produto', error: error.message });
         }
     }
 
-    async findAll(req, res, next) {
+    static async findAll(req, res) {
         try {
-            const produtos = await produtoService.findAll();
-            res.json(produtos);
-        } catch (err) {
-            next(err);
+            const produtos = await ProdutoService.findAll();
+            res.status(200).json(produtos);
+        } catch (error) {
+            logger.error('Erro ao buscar produtos:', error);
+            res.status(500).json({ message: 'Erro ao buscar produtos', error: error.message });
         }
     }
 
-    async findById(req, res, next) {
+    static async findById(req, res) {
+        const { productid } = req.params;
         try {
-            const produto = await produtoService.findById(req.params.id);
-            if (produto) {
-                res.json(produto);
-            } else {
-                res.status(404).json({ error: 'Produto not found' });
-            }
-        } catch (err) {
-            next(err);
+            const produto = await ProdutoService.getById(productid);
+            res.status(200).json(produto);
+        } catch (error) {
+            logger.error('Erro ao buscar o produto:', error);
+            res.status(404).json({ message: 'Produto não encontrado', error: error.message });
         }
     }
 
-    async update(req, res, next) {
+    static async update(req, res) {
         try {
-            const produto = await produtoService.update(req.params.id, req.body);
-            res.json(produto);
-        } catch (err) {
-            next(err);
+            const { productid, nome, descricao, preco, precovenda, quantidade } = req.body;
+
+            const produto = new Produto(productid, nome, descricao, preco, precovenda, quantidade);
+            await ProdutoService.update(produto);
+            res.status(200).json({ message: 'Produto atualizado com sucesso!', produto });
+        } catch (error) {
+            logger.error('Erro ao atualizar produto:', error);
+            res.status(500).json({ message: 'Erro ao atualizar produto', error: error.message });
         }
     }
 
-    async delete(req, res, next) {
+    static async delete(req, res) {
+        logger.info(req.params);
+        const { productid } = req.params;
+        logger.info(productid);
         try {
-            await produtoService.delete(req.params.id);
-            res.status(204).send();
-        } catch (err) {
-            next(err);
+            await ProdutoService.delete(productid);
+            res.status(200).json({ message: 'Produto deletado com sucesso!' });
+        } catch (error) {
+            logger.error('Erro ao deletar produto:', error);
+            res.status(500).json({ message: 'Erro ao deletar produto', error: error.message });
         }
     }
 }
 
-module.exports = new ProdutoController();
+module.exports = produtoController;

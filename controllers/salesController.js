@@ -1,93 +1,137 @@
-const vendaService = require('../services/salesService');
+const VendaService = require('../services/salesService'); // Importando o serviço de Venda
+const ItemVenda = require('../models/Itensvendas');
+const Venda = require('../models/Itensvendas');
+const logger = require('../config/logger'); // Importando o logger
 
-const criarVenda = async (req, res) => {
-    try {
-        const venda = await vendaService.create(req.body);
-        res.status(201).json(venda);
-    } catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({ message: err.message });
-        } else {
-            res.status(500).json({ message: 'Erro ao criar venda', error: err.message });
+class VendaController {
+    // Método para criar uma nova venda
+    static async create(req, res) {
+        const { items, totalprice, pagamento, situacao, clienteid, productid } = req.body;
+
+        const venda = new Venda(totalprice, pagamento, situacao, clienteid, productid);
+        try {
+            await VendaService.create(Venda);
+            await this.addItem(items, Venda.vendaid);
+            logger.info(`Venda criada com sucesso: ${JSON.stringify(venda)}`);
+            return res.status(201).json({ message: 'Venda adicionado com sucesso!', venda });
+        } catch (error) {
+            logger.error(`Erro ao criar venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao criar venda', error: error.message });
         }
     }
-};
 
-const listarVendas = async (req, res) => {
-    try {
-        const vendas = await vendaService.findAll({
-            include: [{ model: ItemVenda,  as: 'itens' }]
-        });
-        res.status(200).json(vendas);
-    } catch (err) {
-        res.status(500).json({ message: 'Erro ao listar vendas', error: err.message });
-    }
-};
-
-const listarItensVenda = async (req, res) => {
-    try {
-        const itens = await vendaService.findAllItems();
-        res.status(200).json(itens);
-    } catch (err) {
-        res.status(500).json({ message: 'Erro ao listar itens de venda', error: err.message });
-    }
-};
-
-const buscarVendaPorId = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const venda = await vendaService.findById(id);
-        if (venda) {
-            res.status(200).json(venda);
-        } else {
-            res.status(404).json({ message: 'Venda não encontrada' });
-        }
-    } catch (err) {
-        res.status(500).json({ message: 'Erro ao buscar venda', error: err.message });
-    }
-};
-
-const buscarItensVendaPorId = async (req, res) => {
-    try {
-        const vendaId = req.params.id;
-        const itensVenda = await salesService.ItensVendaPorId(vendaId);
-        res.json(itensVenda);
-    } catch (error) {
-        console.error('Erro ao listar itens de venda:', error);
-        res.status(500).json({ error: 'Erro ao listar itens de venda' });
-    }
-};
-
-const atualizarVenda = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const venda = await vendaService.update(id, req.body);
-        res.status(200).json(venda);
-    } catch (err) {
-        if (err.name === 'ValidationError') {
-            res.status(400).json({ message: err.message });
-        } else {
-            res.status(500).json({ message: 'Erro ao atualizar venda', error: err.message });
+    // Método para obter todas as vendas
+    static async getAll(req, res) {
+        try {
+            const vendas = await VendaService.getAll();
+            logger.info('Todas as vendas recuperadas com sucesso');
+            return res.status(200).json(vendas);
+        } catch (error) {
+            logger.error(`Erro ao buscar vendas: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao buscar vendas', error: error.message });
         }
     }
-};
 
-const deletarVenda = async (req, res) => {
-    try {
-        const { id } = req.params;
-        await vendaService.delete(id);
-        res.status(204).send();
-    } catch (err) {
-        res.status(500).json({ message: 'Erro ao deletar venda', error: err.message });
+    // Método para obter uma venda específica por ID
+    static async getById(req, res) {
+        const { vendaId } = req.params;
+
+        try {
+            const venda = await VendaService.getById(vendaId);
+            logger.info(`Venda recuperada com sucesso: ${JSON.stringify(venda)}`);
+            return res.status(200).json(venda);
+        } catch (error) {
+            logger.error(`Erro ao buscar a venda: ${error.message}`);
+            return res.status(404).json({ message: 'Venda não encontrada', error: error.message });
+        }
     }
-};
 
-module.exports = {
-    criarVenda,
-    listarVendas,
-    listarItensVenda,
-    buscarVendaPorId,
-    buscarItensVendaPorId,
-    atualizarVenda,
-    deletarVenda,
-};
+    // Método para atualizar uma venda
+    static async update(req, res) {
+        const venda = req.body;
+
+        try {
+            const vendaAtualizada = await VendaService.update(venda);
+            logger.info(`Venda atualizada com sucesso: ${JSON.stringify(vendaAtualizada)}`);
+            return res.status(200).json(vendaAtualizada);
+        } catch (error) {
+            logger.error(`Erro ao atualizar venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao atualizar venda', error: error.message });
+        }
+    }
+
+    // Método para deletar uma venda
+    static async delete(req, res) {
+        const { vendaId } = req.params;
+
+        try {
+            await VendaService.delete(vendaId);
+            logger.info(`Venda deletada com sucesso: ${vendaId}`);
+            return res.status(204).send(); // Retorna 204 No Content
+        } catch (error) {
+            logger.error(`Erro ao deletar venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao deletar venda', error: error.message });
+        }
+    }
+
+    // Método para adicionar um item à venda
+    static async addItem(items, vendaid) {
+        const { nome, pagamento, preco, precovenda, productid, quantidade } = items;
+       
+        const itemVenda = new ItemVenda(nome, pagamento, preco, precovenda, productid, quantidade);
+
+        try {
+            await VendaService.addItem(vendaid, itemVenda);
+            logger.info(`Item adicionado à venda ${vendaid}: ${JSON.stringify(itemVenda)}`);
+            res.status(201).json({ message: 'itemVenda adicionado com sucesso!', itemVenda });
+        } catch (error) {
+            logger.error(`Erro ao adicionar item à venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao adicionar item à venda', error: error.message });
+        }
+    }
+
+    // Método para obter todos os itens de uma venda
+    static async getItems(req, res) {
+        const { vendaId } = req.params;
+
+        try {
+            const itens = await VendaService.getItems(vendaId);
+            logger.info(`Itens da venda ${vendaId} recuperados com sucesso`);
+            return res.status(200).json(itens);
+        } catch (error) {
+            logger.error(`Erro ao buscar itens da venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao buscar itens da venda', error: error.message });
+        }
+    }
+
+    // Método para atualizar um item da venda
+    static async updateItem(req, res) {
+        const { vendaId } = req.params;
+        const item = req.body;
+
+        try {
+            const itemAtualizado = await VendaService.updateItem(vendaId, item);
+            logger.info(`Item da venda ${vendaId} atualizado com sucesso: ${JSON.stringify(itemAtualizado)}`);
+            return res.status(200).json(itemAtualizado);
+        } catch (error) {
+            logger.error(`Erro ao atualizar item da venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao atualizar item da venda', error: error.message });
+        }
+    }
+
+    // Método para deletar um item da venda
+    static async deleteItem(req, res) {
+        const { vendaId, itemId } = req.params;
+
+        try {
+            await VendaService.deleteItem(vendaId, itemId);
+            logger.info(`Item ${itemId} da venda ${vendaId} deletado com sucesso`);
+            return res.status(204).send(); // Retorna 204 No Content
+        } catch (error) {
+            logger.error(`Erro ao deletar item da venda: ${error.message}`);
+            return res.status(500).json({ message: 'Erro ao deletar item da venda', error: error.message });
+        }
+    }
+}
+
+module.exports = VendaController;

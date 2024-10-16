@@ -1,48 +1,16 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/dbconfig');
-const ItemVenda = require('../models/Itensvendas');
-const Cliente = require('../models/clientModel');
-
-const Venda = sequelize.define('Venda', {
-    vendaid: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    datavenda: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-    totalprice: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        validate: {
-            min: 0,
-        },
-    },
-    pagamento: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    situacao: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    clienteid: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Cliente,
-            key: 'id',
-        },
-    },
-}, {
-    timestamps: true,
-    tableName: 'vendas',
-});
-
-// Definição das associações
-Venda.hasMany(ItemVenda, { foreignKey: 'vendaid', as: 'itens' });
-ItemVenda.belongsTo(Venda, { foreignKey: 'vendaid', as: 'venda' });
+// models/vendaModel.js
+class Venda {
+    static idrandom = 0o1;
+    constructor(totalprice, pagamento, situacao, clienteid) {
+        this.vendaid = idrandom++; // ID da venda
+        this.totalprice = totalprice; // Preço total
+        this.pagamento = pagamento; // Método de pagamento
+        this.situacao = situacao; // Situação da venda
+        this.productid = productid;
+        this.clienteid = clienteid; // ID do cliente associado
+        this.createdAt = new Date().toISOString(); // Data de criação
+        this.updatedAt = new Date().toISOString(); // Data de atualização
+    }
+}
 
 module.exports = Venda;

@@ -1,58 +1,86 @@
+const db = require('../config/dbconfig');
 const Cliente = require('../models/clientModel');
+const { ref, set, get, update, remove } = require('firebase/database');
+const logger = require('../config/logger'); // Importando o logger
 
 class ClienteService {
-    async create(clienteData) {
-        try {
-        return await Cliente.create(clienteData);
-    } catch (err) {
-        logger.error(`Error in ClienteService findAll: ${err.message}`);
-        throw err;
+  static async save(clienteData) {
+    const clienteRef = ref(db, `Clientes/${clienteData.clientid}`);
+    try {
+      await set(clienteRef, clienteData);
+      logger.info('Cliente salvo com sucesso!');
+      return clienteData; // Retorna o produto salvo
+    } catch (error) {
+      logger.error('Erro ao salvar o produto:', error);
+      throw error;
     }
-    }
+  }
 
-    async findAll() {    
-        try {
-        return await Cliente.findAll();
-    } catch (err) {
-        logger.error(`Error in ClienteService findAll: ${err.message}`);
-        throw err;
+  static async findById(clientid) {
+    const ClienteRef = ref(db, `Clientes/${clientid}`);
+    try {
+      const snapshot = await get(ClienteRef);
+      if (snapshot.exists()) {
+        return snapshot.val(); // Retorna o Cliente encontrado
+      } else {
+        throw new Error('Cliente não encontrado');
+      }
+    } catch (error) {
+      logger.error('Erro ao buscar o Cliente:', error);
+      throw error;
     }
-    }
+  }
 
-    async findById(id) {
-        try{
-        return await Cliente.findByPk(id);
-    } catch (err) {
-        logger.error(`Error in ClienteService findById: ${err.message}`);
-        throw err;
+  static async findAll() {
+    const ClientesRef = ref(db, 'Clientes');
+    try {
+      const snapshot = await get(ClientesRef);
+      if (snapshot.exists()) {
+        return snapshot.val(); // Retorna todos os Clientes
+      } else {
+        logger.info('Nenhum produto encontrado.');
+        return null;
+      }
+    } catch (error) {
+      logger.error('Erro ao buscar Clientes:', error);
+      throw error;
     }
-    }
+  }
 
-    async update(id, clienteData) {
-        try{
-        const cliente = await this.findById(id);
-        if (cliente) {
-            return await cliente.update(clienteData);
-        }
-        throw new Error('Cliente not found');
-    } catch (err) {
-        logger.error(`Error in ClienteService update: ${err.message}`);
-        throw err;
-    }
-    }
+  static async update(id, clienteData) {
+    const cliente = new Cliente(
+      clienteData.nome,
+      clienteData.email,
+      clienteData.cpf,
+      clienteData.telefone,
+    );
 
-    async delete(id) {
-        try{
-        const cliente = await this.findById(id);
-        if (cliente) {
-            return await cliente.destroy();
-        }
-        throw new Error('Cliente not found');
-    } catch (err) {
-        logger.error(`Error in ClienteService delete: ${err.message}`);
-        throw err;
+    // Validações
+    Cliente.validarEmail(cliente.email);
+    Cliente.validarCpf(cliente.cpf);
+    Cliente.validarTelefone(cliente.telefone);
+
+    const clienteRef = ref(db, `clientes/${id}`);
+    await update(clienteRef, {
+      nome: cliente.nome,
+      email: cliente.email,
+      cpf: cliente.cpf,
+      telefone: cliente.telefone,
+      updatedAt: new Date().toISOString(),
+    });
+    return id; // Retorna o ID atualizado
+  }
+
+  static async delete(clientid) {
+    const ClienteRef = ref(db, `Clientes/${clientid}`);
+    try {
+      await remove(ClienteRef);
+      logger.info('Cliente deletado com sucesso!');
+    } catch (error) {
+      logger.error('Erro ao deletar o Cliente:', error);
+      throw error;
     }
-    }
+  }
 }
 
-module.exports = new ClienteService();
+module.exports = ClienteService;

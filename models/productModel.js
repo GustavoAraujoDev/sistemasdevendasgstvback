@@ -1,44 +1,15 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/dbconfig');
-
-const Produto = sequelize.define('Produto', {
-    productid: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    nome: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    descricao: {
-        type: DataTypes.TEXT,
-        allowNull: true,
-    },
-    preco: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        validate: {
-            min: 0,
-        },
-    },
-    precovenda: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
-        validate: {
-            min: 0,
-        },
-    },
-    quantidade: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-            min: 0,
-        },
-    },
-}, {
-    timestamps: true,
-    tableName: 'produtos',
-});
+class Produto {
+    static idrandom = 0o1;
+    constructor(nome, descricao, preco, precovenda, quantidade) {
+        this.productid = Produto.idrandom++; // ID do produto
+        this.nome = nome; // Nome do produto
+        this.descricao = descricao; // Descrição do produto
+        this.preco = preco; // Preço do produto
+        this.precovenda = precovenda; // Preço de venda
+        this.quantidade = quantidade; // Quantidade disponível
+        this.createdAt = new Date().toISOString(); // Data de criação
+        this.updatedAt = new Date().toISOString(); // Data de atualização
+    }
+}
 
 module.exports = Produto;

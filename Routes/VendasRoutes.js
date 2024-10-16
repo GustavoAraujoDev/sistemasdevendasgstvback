@@ -4,12 +4,12 @@ const { vendaSchema } = require('../middleware/salesValidation');
 const validate = require('../middleware/validateRequest')
 const router = express.Router();
 
-router.post('/', validate(vendaSchema), vendaController.criarVenda);
-router.get('/', vendaController.listarVendas);
-router.get('/itens', vendaController.listarItensVenda);
-router.get('/:id', vendaController.buscarVendaPorId);
-router.get('/itens/:id', vendaController.buscarItensVendaPorId);
-router.put('/:id', validate(vendaSchema), vendaController.atualizarVenda);
-router.delete('/:id', vendaController.deletarVenda);
-
+router.post('/', validate(vendaSchema), vendaController.create);
+router.post('/itens', validate(vendaSchema), vendaController.addItem);
+router.get('/', vendaController.getAll);
+router.get('/:id', vendaController.getById);
+router.get('/itens/:id', vendaController.getItems);
+router.put('/:id', validate(vendaSchema), vendaController.update);
+router.delete('/:id', vendaController.delete);
+router.delete('/itens/:id', vendaController.deleteItem);
 module.exports = router;

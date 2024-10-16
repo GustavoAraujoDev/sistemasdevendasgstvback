@@ -1,48 +1,38 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/dbconfig');
+class Cliente {
+    static idrandom = 0o1;
+    constructor(nome, email, cpf, telefone) {
+        this.clientid = Cliente.idrandom++;
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.telefone = telefone;
+        this.createdAt = new Date().toISOString(); // Data de criação
+        this.updatedAt = new Date().toISOString(); // Data de atualização
+    }
 
-const Cliente = sequelize.define('Cliente', {
-    id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    nome: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            isEmail: true,
-        },
-    },
-    cpf: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-            is: {
-                args: /^\d{11}$/,
-                msg: 'CPF must be 11 digits'
-            }
-        },
-    },
-    telefone: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        validate: {
-            is: {
-                args: /^\+?[1-9]\d{1,14}$/,
-                msg: 'Telefone must be a valid phone number'
-            }
-        },
-    },
-}, {
-    timestamps: true,
-    tableName: 'clientes',
-});
+    // Validação de CPF
+    static validarCpf(cpf) {
+        const regex = /^\d{11}$/;
+        if (!regex.test(cpf)) {
+            throw new Error('CPF must be 11 digits');
+        }
+    }
+
+    // Validação de Email
+    static validarEmail(email) {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!regex.test(email)) {
+            throw new Error('Invalid email format');
+        }
+    }
+
+    // Validação de Telefone
+    static validarTelefone(telefone) {
+        const regex = /^\+?[1-9]\d{1,14}$/;
+        if (telefone && !regex.test(telefone)) {
+            throw new Error('Telefone must be a valid phone number');
+        }
+    }
+}
 
 module.exports = Cliente;
