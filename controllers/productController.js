@@ -40,9 +40,9 @@ class produtoController {
 
     static async update(req, res) {
         try {
-            const { productid, nome, descricao, preco, precovenda, quantidade } = req.body;
+            const { nome, descricao, preco, precovenda, quantidade } = req.body;
 
-            const produto = new Produto(productid, nome, descricao, preco, precovenda, quantidade);
+            const produto = new Produto(nome, descricao, preco, precovenda, quantidade);
             await ProdutoService.update(produto);
             res.status(200).json({ message: 'Produto atualizado com sucesso!', produto });
         } catch (error) {

@@ -1,7 +1,7 @@
 class ItemVenda {
-    static idrandom = 0o1;
+    static idrandom = 10;
     constructor(produtoid, quantidade, nome, descricao, preco, precovenda) {
-        this.id = idrandom++;
+        this.itemId = ItemVenda.idrandom++;
         this.produtoid = produtoid;
         this.quantidade = quantidade;
         this.createdAt = new Date().toISOString(); // Data de criação

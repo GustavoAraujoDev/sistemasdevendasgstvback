@@ -1,5 +1,5 @@
 class Cliente {
-    static idrandom = 0o1;
+    static idrandom = 10;
     constructor(nome, email, cpf, telefone) {
         this.clientid = Cliente.idrandom++;
         this.nome = nome;

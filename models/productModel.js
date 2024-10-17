@@ -1,5 +1,5 @@
 class Produto {
-    static idrandom = 0o1;
+    static idrandom = 10;
     constructor(nome, descricao, preco, precovenda, quantidade) {
         this.productid = Produto.idrandom++; // ID do produto
         this.nome = nome; // Nome do produto

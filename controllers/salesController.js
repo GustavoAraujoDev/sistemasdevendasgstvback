@@ -6,12 +6,12 @@ const logger = require('../config/logger'); // Importando o logger
 class VendaController {
     // Método para criar uma nova venda
     static async create(req, res) {
-        const { items, totalprice, pagamento, situacao, clienteid, productid } = req.body;
+        const { items, totalprice, pagamento, situacao, clienteid, productids } = req.body;
 
-        const venda = new Venda(totalprice, pagamento, situacao, clienteid, productid);
+        const venda = new Venda(totalprice, pagamento, situacao, clienteid, productids);
         try {
             await VendaService.create(Venda);
-            await this.addItem(items, Venda.vendaid);
+            await this.addItem(items, Venda.Vendaid, res);
             logger.info(`Venda criada com sucesso: ${JSON.stringify(venda)}`);
             return res.status(201).json({ message: 'Venda adicionado com sucesso!', venda });
         } catch (error) {
@@ -74,21 +74,28 @@ class VendaController {
         }
     }
 
-    // Método para adicionar um item à venda
-    static async addItem(items, vendaid) {
-        const { nome, pagamento, preco, precovenda, productid, quantidade } = items;
-       
-        const itemVenda = new ItemVenda(nome, pagamento, preco, precovenda, productid, quantidade);
+// Método para adicionar itens à venda
+static async addItem(items, vendaid, res) {
+    try {
+        for (const item of items) {
+            const { nome, pagamento, preco, precovenda, productid, quantidade } = item;
 
-        try {
+            const itemVenda = new ItemVenda(nome, pagamento, preco, precovenda, productid, quantidade);
+
+            // Adicionar item à venda no serviço
             await VendaService.addItem(vendaid, itemVenda);
             logger.info(`Item adicionado à venda ${vendaid}: ${JSON.stringify(itemVenda)}`);
-            res.status(201).json({ message: 'itemVenda adicionado com sucesso!', itemVenda });
-        } catch (error) {
-            logger.error(`Erro ao adicionar item à venda: ${error.message}`);
-            return res.status(500).json({ message: 'Erro ao adicionar item à venda', error: error.message });
         }
+
+        // Responder sucesso após adicionar todos os itens
+        res.status(201).json({ message: 'Itens adicionados com sucesso!' });
+
+    } catch (error) {
+        logger.error(`Erro ao adicionar itens à venda: ${error.message}`);
+        return res.status(500).json({ message: 'Erro ao adicionar itens à venda', error: error.message });
     }
+}
+
 
     // Método para obter todos os itens de uma venda
     static async getItems(req, res) {

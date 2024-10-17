@@ -87,8 +87,8 @@ class VendaService {
     // Métodos para gerenciar os itens de Venda
 
     // Método para adicionar um item à Venda
-    static async addItem(VendaId, item) {
-        const itemRef = ref(db, `Vendas/${VendaId}/itens/${item.itemId}`);
+    static async addItem(VendaId, itemVenda) {
+        const itemRef = ref(db, `Vendas/${VendaId}/itens/${itemVenda.itemId}`);
         try {
             await set(itemRef, item);
             logger.info('Item adicionado à Venda com sucesso!');
