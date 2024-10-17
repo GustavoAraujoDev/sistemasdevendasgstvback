@@ -15,7 +15,7 @@ const vendaSchema = Joi.object({
     totalprice: Joi.number().precision(2).required(),
     pagamento: Joi.string().max(255).required(),
     situacao: Joi.string().max(255).required(),
-    datavenda: Joi.date().required(),
+    productids: Joi.number().integer().required(),
     clienteid: Joi.number().integer().required(),
     items: Joi.array().items(itemVendaSchema).required(),
 });
