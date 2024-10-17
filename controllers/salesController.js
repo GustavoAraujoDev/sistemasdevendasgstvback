@@ -6,9 +6,10 @@ const logger = require('../config/logger'); // Importando o logger
 class VendaController {
   // Método para criar uma nova venda
   static async create(req, res) {
+    logger.info(req.body);
     const { totalprice, pagamento, situacao, productids, clientid, items } =
       req.body;
-
+     
     const venda = new Venda(
       totalprice,
       pagamento,
