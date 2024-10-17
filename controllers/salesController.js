@@ -9,10 +9,15 @@ class VendaController {
     console.log(req.body);
     const { totalprice, pagamento, situacao, productids, clientid, items } =
       req.body;
-      if (!totalprice || !pagamento || !situacao || !productids || !clientid || !items) {
-        console.error('Dados faltando ou inválidos:', req.body);
-        return res.status(400).json({ message: 'Dados incompletos ou inválidos' });
-      }
+      // Verifique se todos os dados necessários estão presentes
+  if (!totalprice || !pagamento || !situacao || !productids || !clientid || !items) {
+    console.error('Dados faltando ou inválidos:', req.body);
+    return res.status(400).json({
+      message: 'Dados incompletos ou inválidos',
+      receivedData: req.body // Retorne o body recebido para depuração
+    });
+  }
+
       
     const venda = new Venda(
       totalprice,
