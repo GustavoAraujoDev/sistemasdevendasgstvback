@@ -1,7 +1,7 @@
 // models/vendaModel.js
 class Venda {
     static idrandom = 10;
-    constructor(totalprice, pagamento, situacao, clienteid) {
+    constructor(totalprice, pagamento, situacao, productids, clienteid) {
         this.Vendaid = Venda.idrandom++; // ID da venda
         this.totalprice = totalprice; // Preço total
         this.pagamento = pagamento; // Método de pagamento

@@ -6,9 +6,9 @@ const logger = require('../config/logger'); // Importando o logger
 class VendaController {
     // Método para criar uma nova venda
     static async create(req, res) {
-        const { items, totalprice, pagamento, situacao, clienteid, productids } = req.body;
+        const { totalprice, pagamento, situacao, productids, clientid, items } = req.body;
 
-        const venda = new Venda(totalprice, pagamento, situacao, clienteid, productids);
+        const venda = new Venda(totalprice, pagamento, situacao, productids, clientid);
         try {
             await VendaService.create(Venda);
             await this.addItem(items, Venda.Vendaid, res);
@@ -78,9 +78,9 @@ class VendaController {
 static async addItem(items, vendaid, res) {
     try {
         for (const item of items) {
-            const { nome, pagamento, preco, precovenda, productid, quantidade } = item;
+            const { productid, nome, descricao, preco, precovenda,  quantidade } = item;
 
-            const itemVenda = new ItemVenda(nome, pagamento, preco, precovenda, productid, quantidade);
+            const itemVenda = new ItemVenda(productid, nome, descricao, preco, precovenda, quantidade);
 
             // Adicionar item à venda no serviço
             await VendaService.addItem(vendaid, itemVenda);
