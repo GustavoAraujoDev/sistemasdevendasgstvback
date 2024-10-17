@@ -15,6 +15,7 @@ class produtoController {
         precovenda,
         quantidade,
       );
+      logger.info(produto)
       await ProdutoService.save(produto);
       res
         .status(201)

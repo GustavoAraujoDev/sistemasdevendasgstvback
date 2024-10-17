@@ -7,6 +7,7 @@ const logger = require('../config/logger'); // Importando o logger
 class ProdutoService {
   // Método para salvar o produto
   static async save(produto) {
+    logger.info(produto);
     const produtoRef = ref(db, `produtos/${produto.productid}`);
     try {
       await set(produtoRef, produto);
