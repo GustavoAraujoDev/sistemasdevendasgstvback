@@ -7,6 +7,7 @@ const logger = require('../config/logger'); // Importando o logger
 class VendaService {
   // Método para criar uma nova venda
   static async create(Venda) {
+    logger.info(Venda)
     const VendaRef = ref(db, `Vendas/${Venda.Vendaid}`);
     try {
       await set(VendaRef, Venda);

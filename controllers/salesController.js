@@ -16,6 +16,7 @@ class VendaController {
       productids,
       clientid,
     );
+    logger.info(venda);
     try {
       await VendaService.create(venda);
       await this.addItem(items, venda.Vendaid, res);
