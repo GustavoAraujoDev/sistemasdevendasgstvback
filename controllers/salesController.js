@@ -10,8 +10,8 @@ class VendaController {
 
         const venda = new Venda(totalprice, pagamento, situacao, productids, clientid);
         try {
-            await VendaService.create(Venda);
-            await this.addItem(items, Venda.Vendaid, res);
+            await VendaService.create(venda);
+            await this.addItem(items, venda.Vendaid, res);
             logger.info(`Venda criada com sucesso: ${JSON.stringify(venda)}`);
             return res.status(201).json({ message: 'Venda adicionado com sucesso!', venda });
         } catch (error) {

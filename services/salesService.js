@@ -90,9 +90,9 @@ class VendaService {
     static async addItem(VendaId, itemVenda) {
         const itemRef = ref(db, `Vendas/${VendaId}/itens/${itemVenda.itemId}`);
         try {
-            await set(itemRef, item);
+            await set(itemRef, itemVenda);
             logger.info('Item adicionado à Venda com sucesso!');
-            return item; // Retorna o item adicionado
+            return itemVenda; // Retorna o item adicionado
         } catch (error) {
             logger.error('Erro ao adicionar item à Venda:', error);
             throw error;
