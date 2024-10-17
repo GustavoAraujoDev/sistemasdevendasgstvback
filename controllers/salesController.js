@@ -9,7 +9,11 @@ class VendaController {
     logger.info(req.body);
     const { totalprice, pagamento, situacao, productids, clientid, items } =
       req.body;
-     
+      if (!totalprice || !pagamento || !situacao || !productids || !clientid || !items) {
+        console.error('Dados faltando ou inválidos:', req.body);
+        return res.status(400).json({ message: 'Dados incompletos ou inválidos' });
+      }
+      
     const venda = new Venda(
       totalprice,
       pagamento,
