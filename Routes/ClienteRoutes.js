@@ -6,7 +6,6 @@ const clienteSchema = require('../middleware/clientValidation');
 
 const router = express.Router();
 
-
 router.post('/', validate(clienteSchema), clienteController.create);
 router.get('/', clienteController.findAll);
 router.get('/:clientid', clienteController.findById);

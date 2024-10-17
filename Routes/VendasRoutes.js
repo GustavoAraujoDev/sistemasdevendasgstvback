@@ -1,7 +1,7 @@
 const express = require('express');
 const vendaController = require('../controllers/salesController');
 const { vendaSchema } = require('../middleware/salesValidation');
-const validate = require('../middleware/validateRequest')
+const validate = require('../middleware/validateRequest');
 const router = express.Router();
 
 router.post('/', validate(vendaSchema), vendaController.create);
