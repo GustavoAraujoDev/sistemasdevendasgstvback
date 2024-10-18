@@ -26,7 +26,10 @@ class VendaController {
       productids,
       clientid,
     );
-    logger.info(venda);
+    res.status(500).json({
+      message: 'Dados incompletos ou inválidos',
+      receivedData: venda // Retorne o body recebido para depuração
+    });
     try {
       await VendaService.create(venda);
       await this.addItem(items, venda.Vendaid, res);
