@@ -18,7 +18,7 @@ class VendaController {
     );
     try {
       await VendaService.create(venda);
-      await this.addItem(items, venda.Vendaid, res);
+      await this.createItem(items, venda.Vendaid, res);
       logger.info(`Venda criada com sucesso: ${JSON.stringify(venda)}`);
       return res
         .status(201)
@@ -96,7 +96,7 @@ class VendaController {
   }
 
   // Método para adicionar itens à venda
-  static async addItem(items, vendaid, res) {
+  static async createItem(items, vendaid, res) {
     try {
       for (const item of items) {
         const { productid, nome, descricao, preco, precovenda, quantidade } =
@@ -112,7 +112,7 @@ class VendaController {
         );
 
         // Adicionar item à venda no serviço
-        await VendaService.addItem(vendaid, itemVenda);
+        await VendaService.createsItem(vendaid, itemVenda);
         logger.info(
           `Item adicionado à venda ${vendaid}: ${JSON.stringify(itemVenda)}`,
         );
