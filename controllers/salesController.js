@@ -133,11 +133,11 @@ class VendaController {
 
   // Método para obter todos os itens de uma venda
   static async getItems(req, res) {
-    const { vendaId } = req.params;
+    const { id } = req.params;
 
     try {
-      const itens = await VendaService.getItems(vendaId);
-      logger.info(`Itens da venda ${vendaId} recuperados com sucesso`);
+      const itens = await VendaService.getItems(id);
+      logger.info(`Itens da venda ${id} recuperados com sucesso`);
       return res.status(200).json(itens);
     } catch (error) {
       logger.error(`Erro ao buscar itens da venda: ${error.message}`);

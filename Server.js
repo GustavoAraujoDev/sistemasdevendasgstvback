@@ -10,7 +10,7 @@ const errorHandler = require('./middleware/errorHandler');
 const PORT = 6060;
 const sequelize = require('./config/dbconfig');
 const Logger = require('./config/logger');
-const https = require('http');
+const http = require('http');
 
 const app = express();
 
@@ -48,7 +48,7 @@ const startServer = async () => {
     }
 
     
-    https.createServer(app).listen(PORT, () => {
+    http.createServer(app).listen(PORT, () => {
       Logger.info(`Server is running on https://localhost:${PORT}`);
     });
   } catch (error) {
