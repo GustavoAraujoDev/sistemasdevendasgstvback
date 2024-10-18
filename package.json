@@ -21,6 +21,7 @@
     "firebase": "^10.14.0",
     "fs": "^0.0.1-security",
     "glob": "^10.4.2",
+    "http": "^0.0.1-security",
     "joi": "^17.13.3",
     "lru-cache": "^10.3.0",
     "rimraf": "^5.0.7",
