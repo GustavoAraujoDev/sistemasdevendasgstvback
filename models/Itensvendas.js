@@ -1,8 +1,8 @@
 class ItemVenda {
   static idrandom = 10;
-  constructor(produtoid, nome, descricao, preco, precovenda, quantidade) {
+  constructor(productid, nome, descricao, preco, precovenda, quantidade) {
     this.itemId = ItemVenda.idrandom++;
-    this.produtoid = produtoid;
+    this.productid = productid;
     this.nome = nome;
     this.descricao = descricao;
     this.preco = preco;
