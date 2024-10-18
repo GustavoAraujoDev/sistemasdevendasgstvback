@@ -1,6 +1,6 @@
 const VendaService = require('../services/salesService'); // Importando o serviço de Venda
 const ItemVenda = require('../models/Itensvendas');
-const Venda = require('../models/Itensvendas');
+const Venda = require('../models/salesModel');
 const logger = require('../config/logger'); // Importando o logger
 
 class VendaController {
