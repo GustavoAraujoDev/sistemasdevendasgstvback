@@ -21,7 +21,6 @@ const vendaSchema = Joi.object({
     .max(100000)
     .required(), // O array deve conter entre 1 e 10 itens
   clientid: Joi.number().integer().required(),
-  items: Joi.array().items(itemVendaSchema).required(),
 });
 
 module.exports = {
