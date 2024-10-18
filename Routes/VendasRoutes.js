@@ -5,7 +5,7 @@ const validate = require('../middleware/validateRequest');
 const router = express.Router();
 
 router.post('/', validate(vendaSchema), vendaController.create);
-router.post('/itens', validate(vendaSchema), vendaController.addItem);
+router.post('/itens', validate(vendaSchema), vendaController.createItem);
 router.get('/', vendaController.getAll);
 router.get('/:id', vendaController.getById);
 router.get('/itens/:id', vendaController.getItems);
