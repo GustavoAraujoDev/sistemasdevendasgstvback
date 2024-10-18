@@ -18,7 +18,7 @@ class VendaController {
     );
     try {
       await VendaService.create(venda);
-      await this.createItem(items, venda.Vendaid, res);
+      await VendaController.createItem(items, venda.Vendaid, res);
       logger.info(`Venda criada com sucesso: ${JSON.stringify(venda)}`);
       return res
         .status(201)
