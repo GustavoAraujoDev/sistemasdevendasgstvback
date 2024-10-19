@@ -58,11 +58,7 @@ class VendaService {
     Venda.updatedAt = new Date().toISOString(); // Atualiza a data de modificação
     try {
       await update(VendaRef, {
-        dataVenda: Venda.dataVenda,
-        totalprice: Venda.totalprice,
-        pagamento: Venda.pagamento,
         situacao: Venda.situacao,
-        clienteid: Venda.clienteid,
         updatedAt: Venda.updatedAt,
       });
       logger.info('Venda atualizada com sucesso!');

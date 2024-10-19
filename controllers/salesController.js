@@ -63,14 +63,17 @@ class VendaController {
 
   // Método para atualizar uma venda
   static async update(req, res) {
-    const venda = req.body;
+    const {Vendaid, situacao} = req.body;
 
     try {
-      const vendaAtualizada = await VendaService.update(venda);
+      const venda = {
+        Vendaid, situacao
+      }
+      await VendaService.update(venda);
       logger.info(
-        `Venda atualizada com sucesso: ${JSON.stringify(vendaAtualizada)}`,
+        `Venda atualizada com sucesso: ${JSON.stringify(venda)}`,
       );
-      return res.status(200).json(vendaAtualizada);
+      return res.status(200).json({ message: 'Venda atualizada com sucesso:', venda });
     } catch (error) {
       logger.error(`Erro ao atualizar venda: ${error.message}`);
       return res
